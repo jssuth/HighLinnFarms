@@ -78,7 +78,9 @@
   font-size: 0.75rem;
   padding: 0.5rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: none;
+  visibility: hidden;
+  pointer-events: none;
+
   opacity: 0;
   transform: translateY(-5px);
   transition: opacity 0.25s ease, transform 0.25s ease;
@@ -100,11 +102,21 @@
   display: block;
   opacity: 1;
   transform: translateY(0);
+  background-color: var(--hlf-field-green);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  visibility: visible;
+  pointer-events: auto;
+
 }
 
 .weather-panel.hidden {
-  display: none;
+  opacity: 0;
+  transform: translateY(-5px);
+  visibility: hidden;
+  pointer-events: none;
+
 }
+
 
 .weather-panel .weather-detail {
   margin-bottom: 0.25rem;

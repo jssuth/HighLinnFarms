@@ -164,17 +164,30 @@ function isNightTime() {
     return hour < 6 || hour >= 18; // Night = 6pm–6am
 }
 
+
+// Weather configuration
+const weatherConfig = {
+  apiKey: "cebf0d4f222fb9dc3f7349133f7db964",
+  lat: 38.0683,      // Prescott, KS
+  lon: -94.7069
+};
+
 // Main update function
 async function updateWeather() {
     const weatherSpan = document.getElementById('weather');
     const weatherText = weatherSpan.querySelector('.weather-text');
     const weatherIcon = weatherSpan.querySelector('.weather-icon');
 
-    const lat = 38.0603; // Prescott, KS
-    const lon = -94.7069;
-    const apiKey = "cebf0d4f222fb9dc3f7349133f7db964"; // replace with your actual key
+    const { lat, lon, apiKey } = weatherConfig;
 
-    let condition, temperature, windSpeed, humidity;
+
+    
+    updateMultiDayForecast(lat, lon);
+
+   
+
+
+    let condition, temperature, windSpeed, humidity, feelsLike;
 
     try {
         const response = await fetch(
@@ -187,6 +200,8 @@ async function updateWeather() {
 
         windSpeed = Math.round(data.wind.speed) + " mph";
         humidity = data.main.humidity + "%";
+        feelsLike = Math.round(data.main.feels_like) + "°F";
+
 
     } catch (error) {
         console.error("Weather API error:", error);
@@ -198,8 +213,6 @@ async function updateWeather() {
         document.getElementById("forecast").innerText = "☁️ Forecast: Unavailable";
 
         document.getElementById("forecast-icon").innerText = icon;
-
-
 
     }
 
@@ -215,9 +228,50 @@ async function updateWeather() {
 
     document.getElementById("wind").innerText = `💨 Wind: ${windSpeed}`;
     document.getElementById("humidity").innerText = `💧 Humidity: ${humidity}`;
-    document.getElementById("forecast").innerText = `☁️ Forecast: ${condition}`;
+    document.getElementById("feels-like").innerText = `🌡️ Feels Like: ${feelsLike}`;
 
-}
+}   // end updateWeather
+
+async function updateMultiDayForecast(lat, lon) {
+
+  const { apiKey } = weatherConfig;
+ 
+  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const dayIndices = [8, 16, 24, 32, 39];
+    const today = new Date();
+    const dayLabels = ["Tomorrow"];
+
+    for (let i = 2; i <= 5; i++) {
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + i);
+        const weekday = futureDate.toLocaleDateString("en-US", { weekday: "short" });
+        dayLabels.push(weekday);
+    }
+
+
+    const forecastDivs = document.querySelectorAll(".forecast-day");
+
+    dayIndices.forEach((index, i) => {
+      const entry = data.list[index];
+      const condition = entry.weather[0].main;
+      const temp = Math.round(entry.main.temp);
+      const icon = getWeatherIcon(condition, false);
+
+      forecastDivs[i].querySelector(".day-label").innerText = dayLabels[i];
+      forecastDivs[i].querySelector(".day-icon").innerText = icon;
+      forecastDivs[i].querySelector(".day-temp").innerText = `${temp}°F`;
+    });
+
+  } catch (error) {
+    console.error("Multiday forecast error:", error);
+  }
+}    // end updateMultiDayForecast
+
 
 // Initial run + auto-refresh every 10 minutes
 updateWeather();
