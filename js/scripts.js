@@ -174,63 +174,70 @@ const weatherConfig = {
 
 // Main update function
 async function updateWeather() {
-    const weatherSpan = document.getElementById('weather');
-    const weatherText = weatherSpan.querySelector('.weather-text');
-    const weatherIcon = weatherSpan.querySelector('.weather-icon');
+  const weatherSpan = document.getElementById("weather");
+  const weatherText = weatherSpan.querySelector(".weather-text");
+  const weatherIcon = weatherSpan.querySelector(".weather-icon");
 
-    const { lat, lon, apiKey } = weatherConfig;
+  const { lat, lon, apiKey } = weatherConfig;
+
+  // Update multi-day forecast
+  updateMultiDayForecast(lat, lon);
+
+  let condition = "Unavailable";
+  let temperature = "--°F";
+  let windSpeed = "--";
+  let humidity = "--";
+  let feelsLike = "--°F";
+
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`
+    );
+    const data = await response.json();
+
+    condition = data.weather[0].main;
+    temperature = Math.round(data.main.temp) + "°F";
+    windSpeed = Math.round(data.wind.speed) + " mph";
+    humidity = data.main.humidity + "%";
+    feelsLike = Math.round(data.main.feels_like) + "°F";
+  } catch (error) {
+    console.error("Weather API error:", error);
+  }
+
+  const isNight = isNightTime();
+  const icon = getWeatherIcon(condition, isNight);
+
+  // Top bar
+  weatherSpan.dataset.icon = icon;
+  weatherText.innerText = `${condition}, ${temperature}`;
+  weatherIcon.innerText = icon;
+
+  // Dropdown details
+  const windEl = document.getElementById("wind");
+  const humidityEl = document.getElementById("humidity");
+  const feelsLikeEl = document.getElementById("feels-like");
+
+  if (windEl) windEl.innerText = `🌬️ Wind: ${windSpeed}`;
+  if (humidityEl) humidityEl.innerText = `💧 Humidity: ${humidity}`;
+  if (feelsLikeEl) feelsLikeEl.innerText = `🌡️ Feels Like: ${feelsLike}`;
+
+  // Updated time
+  const now = new Date();
+  const timeString = now.toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  const updatedEl = document.getElementById("weather-updated");
+  if (updatedEl) {
+    updatedEl.innerText = `Updated ${timeString}`;
+  }
+}
 
 
-    
-    updateMultiDayForecast(lat, lon);
-
-   
 
 
-    let condition, temperature, windSpeed, humidity, feelsLike;
-
-    try {
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`
-        );
-        const data = await response.json();
-
-        condition = data.weather[0].main;
-        temperature = Math.round(data.main.temp) + "°F";
-
-        windSpeed = Math.round(data.wind.speed) + " mph";
-        humidity = data.main.humidity + "%";
-        feelsLike = Math.round(data.main.feels_like) + "°F";
-
-
-    } catch (error) {
-        console.error("Weather API error:", error);
-        condition = "Unavailable";
-        temperature = "--°F";
-
-        document.getElementById("wind").innerText = "💨 Wind: --";
-        document.getElementById("humidity").innerText = "💧 Humidity: --";
-        document.getElementById("forecast").innerText = "☁️ Forecast: Unavailable";
-
-        document.getElementById("forecast-icon").innerText = icon;
-
-    }
-
-    const isNight = isNightTime();
-    const icon = getWeatherIcon(condition, isNight);
-
-    document.getElementById("forecast-icon").innerText = icon;
-
-
-    weatherSpan.dataset.icon = icon;
-    weatherText.innerText = `${condition}, ${temperature}`;
-    weatherIcon.innerText = icon;
-
-    document.getElementById("wind").innerText = `💨 Wind: ${windSpeed}`;
-    document.getElementById("humidity").innerText = `💧 Humidity: ${humidity}`;
-    document.getElementById("feels-like").innerText = `🌡️ Feels Like: ${feelsLike}`;
-
-}   // end updateWeather
+   // end updateWeather
 
 async function updateMultiDayForecast(lat, lon) {
 
@@ -287,6 +294,9 @@ weatherLink.addEventListener("click", () => {
   if (isHidden) {
     weatherPanel.classList.remove("hidden");
     weatherPanel.classList.add("show");
+
+    // Refresh weather when dropdown opens
+    updateWeather();
   } else {
     weatherPanel.classList.remove("show");
     setTimeout(() => {
