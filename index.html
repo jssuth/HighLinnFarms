@@ -10,79 +10,102 @@
 <body>
 
 <div class="top-bar">
+  <div class="top-bar-info">
 
-  <div class="weather-container">
-    <span id="weather" class="weather-link">
-      <span class="weather-icon">❄️</span>
-      <span class="weather-text">Clouds, 19°F</span>
-      <span class="weather-caret">❯</span>
-    </span>
-
-    <div id="weather-panel" class="weather-panel hidden">
-      <div id="weather-location" class="weather-detail">📍 Prescott, KS</div>
-      <div id="weather-updated" class="weather-detail">Updated --:--</div>
-
- 
-      <div id="wind" class="weather-detail">🌬️ Wind: ---</div>
-      <div id="humidity" class="weather-detail">💧 Humidity: ---</div>
-      <div id="feels-like" class="weather-detail">🌡️ Feels Like: --°F</div>
-
-
-      <!-- 5-Day Forecast Block Starts Here --> 
-      <div id="multi-forecast" class="multi-forecast"> 
-        <div class="forecast-day"> 
-            <span class="day-label">Day 1</span> 
-            <span class="day-icon">☁️</span>
-             <span class="day-temp">--°F</span> 
-            </div> <div class="forecast-day"> 
-                <span class="day-label">Day 2</span> 
-                <span class="day-icon">☁️</span> 
-                <span class="day-temp">--°F</span> 
-            </div> 
-            <div class="forecast-day"> 
-                <span class="day-label">Day 3</span> 
-                <span class="day-icon">☁️</span> 
-                <span class="day-temp">--°F</span> 
-            </div> <div class="forecast-day"> 
-                <span class="day-label">Day 4</span> 
-                <span class="day-icon">☁️</span> 
-                <span class="day-temp">--°F</span> 
-            </div> <div class="forecast-day"> 
-                <span class="day-label">Day 5</span> 
-                <span class="day-icon">☁️</span> 
-                <span class="day-temp">--°F</span> 
-            </div> 
-        </div> 
-        <!-- 5-Day Forecast Block Ends Here -->
-
+    <!-- LEFT SIDE: DATE & TIME -->
+    <div class="top-left-info">
+      <span id="date">Fri, 1/23/26</span>
+      <span id="clock">4:53 PM</span>
     </div>
+
+    <!-- RIGHT SIDE: WEATHER -->
+    <div class="top-right-info">
+      <div class="weather-container">
+        <span id="weather-link" class="weather-link">
+          <span class="weather-icon">🌥</span>
+          <span class="weather-text">Clouds, 19°F</span>
+          <span class="weather-caret">▾</span>
+        </span>
+
+        <div id="weather-panel" class="weather-panel hidden">
+          <div id="weather-location" class="weather-detail">📍 Prescott, KS</div>
+          <div id="weather-updated" class="weather-detail">Updated: ——</div>
+          <div id="wind" class="weather-detail">💨 Wind: ——</div>
+          <div id="humidity" class="weather-detail">💧 Humidity: ——</div>
+          <div id="feels-like" class="weather-detail">👆 Feels Like: ——°F</div>
+
+          <div class="weather-city-select">
+            <input
+              type="text"
+              id="weather-city-input"
+              placeholder="City, State or Zip"
+              title="Example: Prescott, KS or 66767"
+              class="weather-input"
+            />
+            <small class="weather-hint">Example: Prescott, KS or ZIP</small>
+
+            <button id="weather-city-submit" class="weather-button">Update</button>
+          </div>
+
+          <div id="multi-forecast" class="multi-forecast">
+            <div class="forecast-day">
+                <span class="day-label">Tomorrow</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 2</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 3</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 4</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 5</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
-
-  <span id="date">Sat, 1/17/26</span>
-  <span id="clock">4:36 PM</span>
-
 </div>
+
 
 
 <header class="site-header">
 
-    <div class="logo-bar">
-        <img src="images/logo-horizontal.png" alt="High Linn Farms Logo" class="header-logo">
-        <h1>High Linn Farms</h1>
-    </div>
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="properties.html">Properties</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="farmtalk.html">Farm Talk</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="stay.html">Stay With Us</a></li>
-        </ul>
-    </nav>
-  
+  <div class="logo-bar">
+    <img src="images/logo-horizontal.png" alt="High Linn Farms logo" class="header-logo" />
+    <h1 class="site-title">High Linn Farms</h1>
+  </div>
+
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/properties">Properties</a></li>
+      <li><a href="/gallery">Gallery</a></li>
+      <li><a href="/farm-talk">Farm Talk</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/stay">Stay With Us</a></li>
+    </ul>
+  </nav>
+
+
 </header>
+
 
 <section class="hero">
     <div class="hero-overlay">
@@ -107,7 +130,7 @@
 
 <main>
     <h2>Our Story Begins Here</h2>
-    <p>This is where your homepage content will go.</p>
+    <p>Homepage content will go here when completed.</p>
 </main>
 
 <footer class="site-footer">

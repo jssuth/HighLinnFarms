@@ -172,9 +172,33 @@ const weatherConfig = {
   lon: -94.7069
 };
 
+async function getCoordinatesForCity(city) {
+  const apiKey = weatherConfig.apiKey;
+  const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    return {
+      lat: data[0].lat,
+      lon: data[0].lon,
+      name: `${data[0].name}, ${data[0].state || data[0].country}`
+    };
+  } catch (err) {
+    console.error("Geocoding error:", err);
+    return null;
+  }
+}
+
+
 // Main update function
 async function updateWeather() {
-  const weatherSpan = document.getElementById("weather");
+  const weatherSpan = document.getElementById("weather-link");
   const weatherText = weatherSpan.querySelector(".weather-text");
   const weatherIcon = weatherSpan.querySelector(".weather-icon");
 
@@ -279,30 +303,195 @@ async function updateMultiDayForecast(lat, lon) {
   }
 }    // end updateMultiDayForecast
 
-
 // Initial run + auto-refresh every 10 minutes
 updateWeather();
 setInterval(updateWeather, 600000);
 
-const weatherLink = document.getElementById("weather");
-const weatherPanel = document.getElementById("weather-panel");
-const weatherCaret = weatherLink.querySelector(".weather-caret");
+// WEATHER DROPDOWN TOGGLE
+const weatherLink = document.getElementById('weather-link');
+const weatherPanel = document.getElementById('weather-panel');
+const weatherCaret = weatherLink.querySelector('.weather-caret');
 
-weatherLink.addEventListener("click", () => {
-  const isHidden = weatherPanel.classList.contains("hidden");
+weatherLink.addEventListener('click', (e) => {
+  e.stopPropagation();
+
+  const isHidden = weatherPanel.classList.contains('hidden');
 
   if (isHidden) {
-    weatherPanel.classList.remove("hidden");
-    weatherPanel.classList.add("show");
-
-    // Refresh weather when dropdown opens
-    updateWeather();
+    weatherPanel.classList.remove('hidden');
+    weatherPanel.classList.add('show');
+    updateWeather(); // refresh when opening
+  
   } else {
-    weatherPanel.classList.remove("show");
+    weatherPanel.classList.remove('show');
+
+    // Revert to Prescott when closing
+    weatherConfig.lat = 38.0683;
+    weatherConfig.lon = -94.7069;
+
+    // Reset location label
+    const locEl = document.getElementById("weather-location");
+    locEl.innerText = "📍 Prescott, KS";
+
+    // Clear forecast blocks (optional but clean)
+    document.querySelectorAll(".forecast-day").forEach((block) => {
+      block.querySelector(".day-label").innerText = "--";
+      block.querySelector(".day-icon").innerText = "🌀";
+      block.querySelector(".day-temp").innerText = "--°F";
+    });
+
+     // Refresh weather
+    updateWeather();
+
     setTimeout(() => {
-      weatherPanel.classList.add("hidden");
-    }, 250); // matches CSS transition
+      weatherPanel.classList.add('hidden');
+    }, 250);
+ }
+
+
+
+  weatherCaret.classList.toggle('rotate');
+});
+
+// WEATHER CITY UPDATE
+const cityInput = document.getElementById("weather-city-input");
+const citySubmit = document.getElementById("weather-city-submit");
+
+citySubmit.addEventListener("click", async () => {
+  const city = cityInput.value.trim();
+  if (!city) return;
+
+  // ZIP detection (5 digits)
+if (/^\d{5}$/.test(city)) {
+    try {
+        const apiKey = weatherConfig.apiKey;
+        const zipUrl = `https://api.openweathermap.org/data/2.5/weather?zip=${city},US&units=imperial&appid=${apiKey}`;
+        const response = await fetch(zipUrl);
+        const data = await response.json();
+
+        if (data.cod !== 200) {
+            alert("ZIP not found. Try again.");
+            return;
+        }
+
+        // Update config with ZIP coordinates
+        weatherConfig.lat = data.coord.lat;
+        weatherConfig.lon = data.coord.lon;
+
+        // Update location label
+        const locEl = document.getElementById("weather-location");
+        locEl.innerText = `📍 ${data.name}, ${data.sys.country}`;
+
+        // Refresh weather
+        updateWeather();
+
+        // Clear input
+        cityInput.value = "";
+        return; // STOP — do not run city/state logic
+    } catch (err) {
+        console.error("ZIP lookup error:", err);
+        alert("ZIP lookup failed.");
+        return;
+    }
+}
+
+// ===============================
+// CITY + STATE HANDLING (Option #2)
+// ===============================
+
+if (city.includes(",")) {
+    const parts = city.split(",").map(p => p.trim());
+
+    if (parts.length === 2) {
+        const cityName = parts[0];
+        let statePart = parts[1].toLowerCase();
+
+        // Special case: OpenWeather uses GB, not UK
+        if (statePart === "uk") statePart = "gb";
+
+        // Full list of US states
+        const states = {
+            "alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR",
+            "california": "CA", "colorado": "CO", "connecticut": "CT", "delaware": "DE",
+            "florida": "FL", "georgia": "GA", "hawaii": "HI", "idaho": "ID",
+            "illinois": "IL", "indiana": "IN", "iowa": "IA", "kansas": "KS",
+            "kentucky": "KY", "louisiana": "LA", "maine": "ME", "maryland": "MD",
+            "massachusetts": "MA", "michigan": "MI", "minnesota": "MN", "mississippi": "MS",
+            "missouri": "MO", "montana": "MT", "nebraska": "NE", "nevada": "NV",
+            "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
+            "north carolina": "NC", "north dakota": "ND", "ohio": "OH", "oklahoma": "OK",
+            "oregon": "OR", "pennsylvania": "PA", "rhode island": "RI", "south carolina": "SC",
+            "south dakota": "SD", "tennessee": "TN", "texas": "TX", "utah": "UT",
+            "vermont": "VT", "virginia": "VA", "washington": "WA", "west virginia": "WV",
+            "wisconsin": "WI", "wyoming": "WY"
+        };
+
+        // Convert full state name → abbreviation
+        if (states[statePart]) {
+            statePart = states[statePart];
+        }
+
+        // If valid 2‑letter abbreviation
+        const validAbbrev = Object.values(states);
+        if (validAbbrev.includes(statePart.toUpperCase())) {
+
+            const formatted = `${cityName},${statePart.toUpperCase()},US`;
+            const coords = await getCoordinatesForCity(formatted);
+
+            if (!coords) {
+                alert("City/state not found. Check spelling.");
+                return;
+            }
+
+            weatherConfig.lat = coords.lat;
+            weatherConfig.lon = coords.lon;
+
+            const locEl = document.getElementById("weather-location");
+            locEl.innerText = `📍 ${coords.name}`;
+
+            updateWeather();
+            cityInput.value = "";
+            return; // STOP — do not run fallback
+        }
+
+        // Foreign country case (e.g., London, GB)
+        const formattedForeign = `${cityName},${statePart}`;
+        const coordsForeign = await getCoordinatesForCity(formattedForeign);
+
+        if (coordsForeign) {
+            weatherConfig.lat = coordsForeign.lat;
+            weatherConfig.lon = coordsForeign.lon;
+
+            const locEl = document.getElementById("weather-location");
+            locEl.innerText = `📍 ${coordsForeign.name}`;
+
+            updateWeather();
+            cityInput.value = "";
+            return;
+        }
+    }
+}
+
+
+  const coords = await getCoordinatesForCity(city);
+
+  if (!coords) {
+    alert("City not found. Try 'City, State' or ZIP.");
+    return;
   }
 
-  weatherCaret.classList.toggle("rotate");
+  // Update config
+  weatherConfig.lat = coords.lat;
+  weatherConfig.lon = coords.lon;
+
+  // Update location label
+  const locEl = document.getElementById("weather-location");
+  locEl.innerText = `📍 ${coords.name}`;
+
+  // Refresh weather
+  updateWeather();
+
+  // Clear the text box
+  cityInput.value = "";
 });
+
