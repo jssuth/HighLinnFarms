@@ -1,0 +1,149 @@
+/* ==========================
+   Policy + Terms ONLY
+   ========================== */
+
+/* Header nav for policy/terms pages */
+.simple-header{
+  background: var(--hlf-field-green);
+  padding: 14px 18px;
+}
+
+.simple-header .main-nav ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+}
+
+.simple-header .main-nav a{
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.simple-header .main-nav a:hover,
+.simple-header .main-nav a:focus-visible{
+  opacity: 1;
+}
+
+/* Green title band */
+.policy-header{
+  background: var(--hlf-field-green);
+  color: #fff;
+  text-align: center;
+  padding: 50px 16px;
+}
+
+/* Content wrapper */
+.policy-page{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+/* Optional: nicer spacing for sections */
+.policy-content h2{
+  margin-top: 28px;
+}
+
+/* =========================================================
+   Floating "Top" Button (Brand Green + Readable Everywhere)
+   Swap-out block (includes hover + mobile adjustments)
+   ========================================================= */
+
+/* Floating Top Button — matches site green */
+
+.to-top-fab{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+
+  background: #3d7f2a;      /* your site green */
+  color: #ffffff !important;
+
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  z-index: 9999;
+}
+
+/* Hover — slightly darker version of same green */
+.to-top-fab:hover{
+  background: #2f6320;
+  color: #ffffff !important;
+}
+
+/* Mobile adjustment */
+@media (max-width: 768px){
+  .to-top-fab{
+    right: 12px;
+    bottom: 12px;
+    padding: 7px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+
+
+/* ===== Policy/Terms footer alignment fix ===== */
+.site-footer .footer-bottom{
+  text-align: center;
+  padding: 18px 18px 22px;
+}
+
+.site-footer .footer-legal-links{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+
+.site-footer .footer-legal-links a{
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.92;
+  font-weight: 600;
+}
+
+.site-footer .footer-legal-links a:hover,
+.site-footer .footer-legal-links a:focus-visible{
+  opacity: 1;
+  text-decoration: none; /* keeps it classy */
+}
+
+.site-footer .footer-bottom p{
+  margin: 0;             /* removes the default “mystery spacing” */
+  line-height: 1.4;
+}
+
+.policy-contact-link {
+  font-weight: 600;
+  text-decoration: none;
+  color: #2f5e2e;
+}
+
+.policy-contact-link:hover {
+  text-decoration: underline;
+}
+
+.policy-page a {
+  color: #2f5d2f;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.policy-page a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+

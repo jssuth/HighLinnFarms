@@ -7,7 +7,7 @@
     <title>High Linn Farms</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body id="top">
 
 <div class="top-bar">
   <div class="top-bar-info">
@@ -93,13 +93,14 @@
 
   <nav class="nav-menu">
     <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/about">About</a></li>
-      <li><a href="/properties">Properties</a></li>
-      <li><a href="/gallery">Gallery</a></li>
-      <li><a href="/farm-talk">Farm Talk</a></li>
-      <li><a href="/contact">Contact</a></li>
-      <li><a href="/stay">Stay With Us</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="properties.html">Properties</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="farm-talk.html">Farm Talk</a></li>
+      <li><a href="contact.html">Contact & Directions</a></li>
+      <li><a href="stay.html">Stay With Us</a></li>
+
     </ul>
   </nav>
 
@@ -122,7 +123,7 @@
         </p>
     </div>
     <div class="mission-photo">
-        <img src="../images/mission.jpg" alt="Sunset over rural road and fields">
+        <img src="images/mission.jpg" alt="Sunset over rural road and fields">
     </div>
 </section>
 
@@ -155,25 +156,38 @@
       <div class="footer-item">
         <span class="footer-label">Email:</span>
         <span class="footer-value">
-          <a href="mailto:info@highlinnfarms.com">info@highlinnfarms.com</a>
+          <a class="footer-link" href="mailto:info@highlinnfarms.com">info@highlinnfarms.com</a>
         </span>
       </div>
 
       <div class="footer-item">
         <span class="footer-label">Phone:</span>
-        <span class="footer-value">(913) 396-2259</span>
+        <span class="footer-value">
+          <a class="footer-link" href="tel:+19133962259">(913) 396-2259</a>
+        </span>
       </div>
 
-      <div class="footer-legal-links">
-        <a href="/privacy.html">Privacy Policy</a> |
-        <a href="/terms.html">Terms of Use</a>
-      </div>
     </div>
   </div> <!-- ✅ closes .footer-content -->
 
-  <div class="footer-bottom">
-    <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
-  </div>
+   <hr class="footer-divider">
+
+    <div class="footer-bottom">
+
+      <div class="footer-bottom-row">
+        <div class="footer-legal-links">
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Use</a>
+        </div>
+
+        <a class="back-to-top" href="#top">↑ Top</a>
+      </div>
+
+      <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
+
+    </div>
+
+  
 </footer>
 
    <script src="js/scripts.js"></script>

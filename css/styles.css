@@ -20,6 +20,11 @@
 
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 /* ========================= */
 /* TOP BAR — FINAL PLUGIN    */
 /* ========================= */
@@ -160,25 +165,6 @@
 }
 
 /* ========================= */
-/* MOBILE TWEAKS             */
-/* ========================= */
-
-@media (max-width: 600px) {
-  .top-bar-info {
-    gap: 0.75rem;
-    font-size: 0.7rem;
-  }
-
-  .weather-text {
-    font-size: 0.8rem;
-  }
-
-  #date, #clock {
-    white-space: nowrap;
-  }
-}
-
-/* ========================= */
 /* HEADER — RESTORED         */
 /* ========================= */
 
@@ -254,31 +240,17 @@
   text-decoration-color: var(--hlf-gold);
 }
 
-/* ========================= */
-/* MOBILE — FINAL REPLACEMENT */
-/* ========================= */
+/* ====================================================== */
+/* ✅ RESPONSIVE DESIGN — TABLET + MOBILE (Up to 768px)   */
+/* ====================================================== */
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
-  /* TOP BAR TWEAKS */
-  .top-bar-info {
-    gap: 0.75rem;
-    font-size: 0.7rem;
-  }
-
-  .weather-text {
-    font-size: 0.7rem;
-  }
-
-  #date, #clock {
-    white-space: nowrap;
-  }
-
-  /* HEADER FIXES */
+  /* === HEADER === */
   .site-header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 0.75rem 1rem 0.5rem;
+    padding: 0.9rem 1.25rem;
     gap: 0.75rem;
   }
 
@@ -289,34 +261,221 @@
   }
 
   .nav-menu {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: -0.5rem;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: -0.25rem;
   }
 
   .nav-menu ul {
-    flex-direction: column;
-    gap: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    padding: 0.5rem 0;
+    margin: 0;
   }
 
   .nav-menu a {
+    font-size: 0.95rem;
+    padding: 6px 8px;
+    text-decoration: none;
+  }
+
+  /* === HERO SECTION === */
+  .hero-overlay {
+    width: 85%;
+    padding: 14px 16px;
+  }
+
+  .hero-overlay h2 {
+    font-size: 1.9rem;
+    line-height: 1.15;
+  }
+
+  .hero-overlay p {
     font-size: 1rem;
-    padding: 4px 0;
   }
 
-  /* DROPDOWN ALIGNMENT */
-  .weather-panel {
-    top: calc(100% - 0.25rem); /* 👈 mobile-only upward nudge */
-    margin-bottom: 0.5rem;
-  }
+  /* === MISSION SECTION (768px and down) === */
+.mission-split{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: flex-start;
 
+  background-color: #f5f5f5;
+  padding: 1.25rem 1rem 1.25rem;
+  gap: 1rem;
 }
+
+/* IMPORTANT: override any desktop flex-basis like 400px */
+.mission-text,
+.mission-photo{
+  flex: 0 1 auto;
+  max-width: 90%;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.mission-text h2{
+  font-size: 1.6rem;
+  margin-bottom: 0.75rem;
+  color: #2f4f2f;
+}
+
+.mission-text p{
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mission-photo img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+  /* === FOOTER === */
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .footer-item {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .footer-label {
+    min-width: auto;
+  }
+
+    /* === FOOTER bottom: keep Top to the right on small screens === */
+  .footer-bottom-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: nowrap;
+    text-align: center;
+  }
+
+  .footer-legal-links{
+    flex: 1;
+    text-align: center;
+  }
+
+  a.back-to-top{
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+
+  /* === WEATHER/TOP BAR MINOR TWEAKS === */
+  .top-bar-info {
+    gap: 0.75rem;
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .weather-text {
+    font-size: 0.8rem;
+  }
+
+  #date, #clock {
+    white-space: nowrap;
+  }
+}
+
+/* ====================================================== */
+/* ✅ PHONE-SPECIFIC TUNING (Up to 600px)                 */
+/* ====================================================== */
+
+@media (max-width: 600px) {
+
+  /* Even tighter layout for small phones */
+  .site-header {
+    padding: 0.75rem 1rem 0.5rem;
+  }
+
+  .hero-overlay {
+    width: 92%;
+    padding: 12px 14px;
+  }
+
+  .hero-overlay h2 {
+    font-size: 1.7rem;
+    line-height: 1.15;
+  }
+
+  .hero-overlay p {
+    font-size: 0.95rem;
+  }
+
+  /* Mission section spacing slightly reduced again */
+  .mission-split {
+    padding: 1.25rem 1rem 1.25rem;
+    gap: 0.75rem;
+  }
+
+  .mission-text h2 {
+    font-size: 1.45rem;
+  }
+
+  .mission-text p {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  /* Footer text a touch smaller */
+  .footer-bottom p,
+  .footer-legal-links a {
+    font-size: 0.9rem;
+  }
+}
+
+/* ======================================= */
+/* ✨ Subtle fade-up animation for mission  */
+/* ======================================= */
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animate mission items */
+.mission-text,
+.mission-photo {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+/* Slight delay for image */
+.mission-photo {
+  animation-delay: 0.15s;
+}
+
+/* DEBUG line – keep for now if needed */
+.mission { outline: 6px solid red !important; }
+
 
 
 
 /* HERO SECTION */
 .hero {
-    height: 60vh;
+    height: 50vh;
     background-image: url('../images/hero.jpg');
     background-size: cover;
     background-position: center;
@@ -408,108 +567,288 @@
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}   
+
+ /* === Refining Mission vertical spacing === */
+.mission-split {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
-/* FOOTER */
-.site-footer {
-  background-color: #2f4f2f; /* deep green */
-  color: #ffffff;
-  padding: 2rem 2rem 1rem;
-  margin-top: 3rem;
+.mission-text h2 {
+  margin-top: 0 !important;
+  margin-bottom: 0.5rem !important;
 }
 
-.footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
+.mission-text p {
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+}
+   
+/* === Mission Section Spacing — stable === */
+.hero {
+  margin-bottom: 0;       /* prevent big gap after hero */
 }
 
-.footer-left,
-.footer-right {
-  flex: 1 1 250px;
+.mission-split {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-/* LEFT SIDE */
-.footer-logo {
-  height: 50px;
-  width: auto;
+.mission-text h2 {
+  margin-top: 0;
   margin-bottom: 0.5rem;
 }
 
-.footer-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0.25rem 0;
+.mission-text p {
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
 }
 
-.footer-credit {
-  font-size: 0.9rem;
-  opacity: 0.8;
+/* keep footer styles intact (don’t reset anything there) */
+
+
+
+/* =========================================
+   FOOTER (Unified – replace all footer CSS)
+   ========================================= */
+
+.site-footer{
+  background: var(--hlf-field-green);
+  color: #ffffff;
+  padding: 2.5rem 2rem 1.5rem;
+  border-radius: 0 0 14px 14px;
 }
 
-/* RIGHT SIDE */
-.footer-right {
+/* Top part of footer: left brand + right contact */
+.footer-content{
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.footer-section-title {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-bottom: 5px;
-}
-
-.footer-item {
-  display: flex;
+  justify-content: space-between;
   align-items: flex-start;
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-left{
+  flex: 1;
+  min-width: 220px;
+}
+
+.footer-logo{
+  width: 54px;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.footer-name{
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.footer-credit{
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+/* Right contact column */
+.footer-right{
+  flex: 1.4;
+  min-width: 280px;
+}
+
+.footer-section-title{
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.footer-item{
+  display: flex;
   gap: 10px;
+  margin: 0.6rem 0;
 }
 
-.footer-label {
-  font-weight: bold;
-  min-width: 120px; /* aligns all labels */
+.footer-label{
+  min-width: 130px;
+  font-weight: 700;
 }
 
-.footer-value {
-  line-height: 1.4;
+.footer-value{
+  opacity: 0.95;
 }
 
-.footer-value a {
-  color: #d4f5d4; /* lighter green for visibility */
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.footer-value a:hover {
-  text-decoration: underline;
-}
-
-/* LEGAL LINKS */
-.footer-legal-links {
-  margin-top: 10px;
-  font-size: 0.9rem;
-}
-
-.footer-legal-links a {
+/* Links in the contact column */
+.footer-value a{
   color: #d4f5d4;
   text-decoration: none;
+  font-weight: 600;
 }
 
-.footer-legal-links a:hover {
+.footer-value a:hover,
+.footer-value a:focus-visible{
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-/* COPYRIGHT LINE */
-.footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.3);
-  margin-top: 20px;
-  padding-top: 10px;
-  text-align: center;
-  font-size: 0.9rem;
+/* Divider line between top footer and bottom footer */
+.site-footer .footer-divider{
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.25);
+  margin: 1.25rem auto 1rem;
+  max-width: 1100px;
+}
+
+/* Bottom footer: legal left + top right + copyright centered */
+.footer-bottom{
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-bottom-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+/* Legal links (classy by default) */
+.footer-legal-links a{
+  color: #ffffff;
+  text-decoration: none;
   opacity: 0.9;
+  font-weight: 600;
 }
 
+.footer-legal-links a:hover,
+.footer-legal-links a:focus-visible{
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
+/* Back to top (subtle utility) */
+a.back-to-top{
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+a.back-to-top:hover,
+a.back-to-top:focus-visible{
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Copyright */
+.footer-bottom p{
+  margin: 0;
+  text-align: center;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+/* Responsive footer */
+@media (max-width: 768px){
+  .footer-content{
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .footer-item{
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .footer-label{
+    min-width: auto;
+  }
+
+}
+
+/* Floating Back to Top button */
+.back-to-top-btn{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 6px 10px;
+  background: rgba(63,127,42,0.85); /* your green */
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  opacity: 0.85;
+  z-index: 999;
+  transition: all 0.25s ease;
+}
+
+.back-to-top-btn:hover{
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+/* ============================
+   FINAL: Mission spacing mobile
+   paste at VERY END of styles.css
+   ============================ */
+
+@media (max-width: 768px){
+
+  /* If you have a separate mission intro section above the split */
+  .mission{
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .mission-content p{
+    margin-bottom: 0.75rem !important; /* controls the gap under the text */
+  }
+
+  /* The gray image section */
+  .mission-split{
+    padding-top: 0.75rem !important;
+    padding-bottom: 1.25rem !important;
+    margin-top: 0 !important;
+    gap: 0.75rem !important;
+    justify-content: flex-start !important;
+  }
+
+  /* The earlier “400px flex-basis” fix — keep it bulletproof */
+  .mission-text,
+  .mission-photo{
+    flex: 0 1 auto !important;
+  }
+
+  /* Remove any extra margins that can create phantom space */
+  .mission-text h2,
+  .mission-text p{
+    margin-top: 0 !important;
+  }
+
+  .mission-text p{
+    margin-bottom: 0.5rem !important;
+  }
+}
+
+@media (max-width: 600px){
+  .mission{
+    padding-bottom: 0.5rem !important;
+  }
+
+  .mission-split{
+    padding-top: 0.6rem !important;
+    padding-bottom: 1rem !important;
+    gap: 0.6rem !important;
+  }
+}
