@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact & Directions | High Linn Farms</title>
+
+  <!-- Use the same CSS file as other pages -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body id="top">
+
+  <div class="top-bar">
+  <div class="top-bar-info">
+
+    <!-- LEFT SIDE: DATE & TIME -->
+    <div class="top-left-info">
+      <span id="date">Fri, 1/23/26</span>
+      <span id="clock">4:53 PM</span>
+    </div>
+
+    <!-- RIGHT SIDE: WEATHER -->
+    <div class="top-right-info">
+      <div class="weather-container">
+        <span id="weather-link" class="weather-link">
+          <span class="weather-icon">🌥</span>
+          <span class="weather-text">Clouds, 19°F</span>
+          <span class="weather-caret">▾</span>
+        </span>
+
+        <div id="weather-panel" class="weather-panel hidden">
+          <div id="weather-location" class="weather-detail">📍 Prescott, KS</div>
+          <div id="weather-updated" class="weather-detail">Updated: ——</div>
+          <div id="wind" class="weather-detail">💨 Wind: ——</div>
+          <div id="humidity" class="weather-detail">💧 Humidity: ——</div>
+          <div id="feels-like" class="weather-detail">👆 Feels Like: ——°F</div>
+
+          <div class="weather-city-select">
+            <input
+              type="text"
+              id="weather-city-input"
+              placeholder="City, State or Zip"
+              title="Example: Prescott, KS or 66767"
+              class="weather-input"
+            />
+            <small class="weather-hint">Example: Prescott, KS or ZIP</small>
+
+            <button id="weather-city-submit" class="weather-button">Update</button>
+          </div>
+
+          <div id="multi-forecast" class="multi-forecast">
+            <div class="forecast-day">
+                <span class="day-label">Tomorrow</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 2</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 3</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 4</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+            <div class="forecast-day">
+                <span class="day-label">Day 5</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+            </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <!-- HEADER / NAV: Copy your exact header/nav from index.html for consistency -->
+  <header class="site-header">
+
+  <div class="logo-bar">
+    <img src="images/logo-horizontal.png" alt="High Linn Farms logo" class="header-logo" />
+    <h1 class="site-title">High Linn Farms</h1>
+  </div>
+
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="properties.html">Properties</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="farm-talk.html">Farm Talk</a></li>
+      <li><a class="active" href="contact.html">Contact & Directions</a></li>
+      <li><a href="stay.html">Stay With Us</a></li>
+
+    </ul>
+  </nav>
+
+
+</header>
+
+  <!-- PAGE HERO BAND (reuses your policy-header look if you have it) -->
+  <section class="page-banner">
+    <h1>Contact &amp; Directions</h1>
+  </section>
+
+
+  <main class="policy-page">
+
+    <section class="contact-grid">
+      <!-- LEFT: Contact info -->
+      <div class="contact-card">
+        <h2>Contact</h2>
+
+        <p class="contact-line">
+          <strong>Mailing Address:</strong><br>
+          PO Box 117<br>
+          Mound City, Kansas 66056
+        </p>
+
+        <p class="contact-line">
+          <strong>Email:</strong><br>
+          <a class="policy-link" href="mailto:info@highlinnfarms.com?subject=High%20Linn%20Farms%20Inquiry">
+            info@highlinnfarms.com
+          </a>
+        </p>
+
+        <p class="contact-line">
+          <strong>Phone:</strong><br>
+          <a class="policy-link" href="tel:+19133962259">(913) 396-2259</a>
+        </p>
+
+        <p class="contact-small">
+          If you’re on a desktop and clicking “Phone” doesn’t make sense, you can still copy the number or use the form below.
+        </p>
+      </div>
+
+      <!-- RIGHT: Directions + Map -->
+      <div class="contact-card">
+        <h2>Directions</h2>
+        <p class="contact-small">
+          Use the map below for driving directions. On mobile, “Open in Google Maps” is often easiest.
+        </p>
+
+        <div class="map-embed" role="region" aria-label="Map to High Linn Farms">
+          <!-- TODO: Paste your Google Maps embed URL inside src="" -->
+          <iframe
+            title="High Linn Farms map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3141.3607082749786!2d-94.69966769013286!3d38.06197989077962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87c71290ed3271a1%3A0xbf0dd0d295f2c4ca!2s130%20W%204th%20St%2C%20Prescott%2C%20KS%2066767!5e0!3m2!1sen!2sus!4v1771263813195!5m2!1sen!2sus" 
+              width="600" height="450" style="border:0;" 
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+        <!-- TODO: Replace the href with your “share” link or a direct maps query -->
+        <p class="map-note">
+          <a class="policy-link" href="https://maps.app.goo.gl/9q53xQcZweqbJNbu5" target="_blank" rel="noopener">
+            Open in Google Maps (opens in a new tap) →
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <hr class="policy-divider">
+
+    <section class="contact-card contact-form-wrap">
+      <h2>Send a Message</h2>
+      <p class="contact-small">
+        Prefer email? You can still email us directly, but this form is the easiest way to reach us.
+      </p>
+      
+      <form class="contact-form"
+        action="https://formspree.io/f/xreakaqq"
+        method="POST">
+
+        <label>
+          Your Name
+          <input type="text" name="name" required>
+        </label>
+
+        <label>
+          Email Address
+          <input type="email" name="email" required>
+        </label>
+
+        <label>
+          Message
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+
+        <!-- Subject line for the email you receive -->
+        <input type="hidden"
+              name="_subject"
+              value="High Linn Farms website message">
+
+        <!-- Reply-to should be the visitor's email address -->
+        <input type="hidden"
+              name="_replyto"
+              value="email">
+
+        <!-- ⚠️ BEFORE PUBLISHING:
+     Change Formspree _redirect to https://highlinnfarms.com/contact.html
+-->     
+        <!-- DEVELOPMENT ONLY (Live Server): redirect back to your local Contact page.
+            When you publish the site, DELETE the next line and UNCOMMENT the
+            production redirect below. -->
+        <input type="hidden"
+              name="_redirect"
+              value="http://127.0.0.1:5500/contact.html">
+
+        <!-- PRODUCTION ONLY (after site is live): use your real domain.
+        <input type="hidden"
+              name="_redirect"
+              value="https://highlinnfarms.com/contact.html">
+        -->
+
+        <button type="submit">Send Message</button>
+
+      </form>   
+      
+    </section>
+
+  </main>
+
+  <!-- FOOTER: Copy your exact footer from index.html -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <img src="images/logo-horizontal.png" alt="High Linn Farms Logo" class="footer-logo">
+        <p class="footer-name">High Linn Farms</p>
+        <p class="footer-credit">Site by John Sutherland</p>
+      </div>
+
+      <div class="footer-right">
+        <p class="footer-section-title">Contact</p>
+
+        <div class="footer-item">
+          <span class="footer-label">Mailing Address:</span>
+          <span class="footer-value">
+            PO Box 117<br>
+            Mound City, Kansas 66056
+          </span>
+        </div>
+
+        <div class="footer-item">
+          <span class="footer-label">Email:</span>
+          <span class="footer-value">
+            <a class="footer-link" href="mailto:info@highlinnfarms.com">info@highlinnfarms.com</a>
+          </span>
+        </div>
+
+        <div class="footer-item">
+          <span class="footer-label">Phone:</span>
+          <span class="footer-value">
+            <a class="footer-link" href="tel:+19133962259">(913) 396-2259</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-row">
+        <div class="footer-legal-links">
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Use</a>
+        </div>
+
+        <a class="back-to-top" href="#top">↑ Top</a>
+      </div>
+
+      <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- If your other pages use scripts.js, keep this -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>
