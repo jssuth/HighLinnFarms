@@ -1015,3 +1015,57 @@ a.back-to-top:focus-visible{
     text-align: center;
     margin: 0;
 }
+
+/* =========================
+   HOME: Our Story section
+   ========================= */
+
+.home-story {
+  padding: 60px 20px;
+}
+
+.home-story .story-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+.home-story h2 {
+  margin-bottom: 12px;
+}
+
+.home-story p {
+  max-width: 75ch;   /* readable line length */
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+/* ============================= */
+/* Mobile spacing adjustments    */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  .mission-split {
+    padding-bottom: 30px;
+  }
+
+  .home-story {
+    padding: 24px 16px;
+  }
+
+  .story-container {
+    max-width: 100%;
+  }
+
+  .story-container p {
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+}
+@media (max-width: 600px) {
+  .home-story {
+    padding-bottom: 20px;
+  }
+}
