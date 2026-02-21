@@ -1003,8 +1003,18 @@ a.back-to-top:focus-visible{
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.22);
 }
+
+/* Contact page banner override (vertical road image) */
+body.page-contact .page-banner{
+    background-image: url("../images/RedRoadSide.jpeg");
+    background-position: center 55%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 320px;
+}
+
 
 /* Banner title */
 .page-banner h1 {
@@ -1067,5 +1077,22 @@ a.back-to-top:focus-visible{
 @media (max-width: 600px) {
   .home-story {
     padding-bottom: 20px;
+  }
+}
+
+/* Contact page: responsive banner height */
+.page-contact .page-banner { height: 320px; }
+
+@media (max-width: 768px) {
+  .page-contact .page-banner { height: 240px; }
+}
+
+@media (max-width: 480px) {
+  .page-contact .page-banner { height: 200px; }
+}
+
+@media (min-width: 1100px){
+  body.page-contact .page-banner{
+    background-position: center 57%;
   }
 }
