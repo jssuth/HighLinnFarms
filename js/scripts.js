@@ -495,3 +495,227 @@ if (city.includes(",")) {
   cityInput.value = "";
 });
 
+//About page viewer logic
+(function () {
+  function setupViewer(viewerEl) {
+    const thumbsWrap = viewerEl.querySelector("[data-items]");
+    const thumbs = Array.from(thumbsWrap.querySelectorAll(".thumb"));
+    const imgEl = viewerEl.querySelector('img.viewer-media[data-type="image"]');
+    const pdfEl = viewerEl.querySelector('iframe.viewer-media[data-type="pdf"]');
+    const countEl = viewerEl.querySelector(".viewer-count");
+    const prevBtn = viewerEl.querySelector("[data-prev]");
+    const nextBtn = viewerEl.querySelector("[data-next]");
+    const closeBtn = viewerEl.querySelector("[data-viewer-close]");
+
+    let index = 0;
+
+    function show(i) {
+      index = (i + thumbs.length) % thumbs.length;
+      thumbs.forEach(t => t.classList.remove("is-active"));
+      const active = thumbs[index];
+      active.classList.add("is-active");
+
+      const src = active.getAttribute("data-src");
+      const kind = active.getAttribute("data-kind");
+
+      // swap media type
+      imgEl.classList.remove("is-active");
+      pdfEl.classList.remove("is-active");
+
+      if (kind === "pdf") {
+        pdfEl.src = src;
+        pdfEl.classList.add("is-active");
+      } else {
+        imgEl.src = src;
+        imgEl.alt = active.getAttribute("aria-label") || "";
+        imgEl.classList.add("is-active");
+      }
+
+      if (countEl) countEl.textContent = `${index + 1} / ${thumbs.length}`;
+    }
+
+    thumbs.forEach((btn, i) => {
+      btn.addEventListener("click", () => show(i));
+    });
+
+    prevBtn.addEventListener("click", () => show(index - 1));
+    nextBtn.addEventListener("click", () => show(index + 1));
+
+    closeBtn.addEventListener("click", () => {
+      viewerEl.classList.remove("is-open");
+      viewerEl.setAttribute("aria-hidden", "true");
+      // reset to first item (portrait) when closing
+      show(0);
+    });
+
+    // initialize
+    show(0);
+  }
+
+  // Open buttons
+  document.querySelectorAll("[data-viewer-open]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-viewer-open");
+      const viewer = document.getElementById(id);
+      if (!viewer) return;
+
+      if (!viewer.dataset.ready) {
+        setupViewer(viewer);
+        viewer.dataset.ready = "true";
+      }
+      viewer.classList.add("is-open");
+      viewer.setAttribute("aria-hidden", "false");
+      viewer.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+})();
+
+// =====================================
+// ABOUT PAGE ARCHIVE VIEWERS
+// =====================================
+
+const ARCHIVE_ITEMS = {
+  "viewer-walter-j": [
+    {
+      type: "image",
+      title: "Portrait",
+      src: "archives/walter-j/portrait.jpeg"
+    },
+    {
+      type: "html",
+      title: "Prosperous Farmer (1899)",
+      src: "archives/walter-j/article-1899-prosperous-farmer.html"
+    }
+  ]
+};
+
+function renderArchiveStage(stageEl, item) {
+  stageEl.innerHTML = "";
+
+  if (item.type === "image") {
+    const img = document.createElement("img");
+    img.src = item.src;
+    img.alt = item.title || "Image";
+    img.loading = "lazy";
+    stageEl.appendChild(img);
+    return;
+  }
+
+  if (item.type === "html") {
+    const iframe = document.createElement("iframe");
+    iframe.src = item.src;
+    iframe.title = item.title || "Archive item";
+    iframe.loading = "lazy";
+    stageEl.appendChild(iframe);
+    return;
+  }
+
+  if (item.type === "pdf") {
+    const iframe = document.createElement("iframe");
+    iframe.src = item.src;
+    iframe.title = item.title || "Document";
+    iframe.loading = "lazy";
+    stageEl.appendChild(iframe);
+  }
+}
+
+function buildArchiveThumbs(thumbsEl, items, activeIndex, onPick) {
+  thumbsEl.innerHTML = "";
+
+  if (items.length <= 1) {
+    thumbsEl.style.display = "none";
+    return;
+  }
+
+  thumbsEl.style.display = "flex";
+
+  items.forEach((item, index) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "viewer-thumb" + (index === activeIndex ? " is-active" : "");
+    btn.title = item.title || `Item ${index + 1}`;
+
+    if (item.type === "image") {
+      const img = document.createElement("img");
+      img.src = item.src;
+      img.alt = item.title || "Thumbnail";
+      img.loading = "lazy";
+      btn.appendChild(img);
+    } else {
+      btn.textContent = item.type === "html" ? "Article" : "PDF";
+      btn.style.fontWeight = "700";
+      btn.style.padding = "18px 10px";
+      btn.style.background = "#fff";
+    }
+
+    btn.addEventListener("click", () => onPick(index));
+    thumbsEl.appendChild(btn);
+  });
+}
+
+function initArchiveViewer(viewerEl) {
+  const viewerId = viewerEl.id;
+  const items = ARCHIVE_ITEMS[viewerId] || [];
+  if (!items.length) return;
+
+  const stage = viewerEl.querySelector(".viewer-stage");
+  const thumbs = viewerEl.querySelector(".viewer-thumbs");
+  const counter = viewerEl.querySelector(".viewer-counter");
+  const prevBtn = viewerEl.querySelector(".viewer-prev");
+  const nextBtn = viewerEl.querySelector(".viewer-next");
+  const closeBtn = viewerEl.querySelector(".viewer-close");
+
+  let currentIndex = 0;
+
+  function updateViewer() {
+    renderArchiveStage(stage, items[currentIndex]);
+    counter.textContent = `${currentIndex + 1} / ${items.length}`;
+
+    buildArchiveThumbs(thumbs, items, currentIndex, (newIndex) => {
+      currentIndex = newIndex;
+      updateViewer();
+    });
+
+    const single = items.length <= 1;
+    prevBtn.disabled = single;
+    nextBtn.disabled = single;
+  }
+
+  prevBtn.onclick = () => {
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    updateViewer();
+  };
+
+  nextBtn.onclick = () => {
+    currentIndex = (currentIndex + 1) % items.length;
+    updateViewer();
+  };
+
+  closeBtn.onclick = () => {
+    viewerEl.hidden = true;
+    currentIndex = 0; // reset to portrait
+    updateViewer();
+
+    const toggle = document.querySelector(`[data-viewer="${viewerId}"]`);
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
+  };
+
+  updateViewer();
+}
+
+document.addEventListener("click", (event) => {
+  const toggle = event.target.closest(".viewer-toggle");
+  if (!toggle) return;
+
+  const viewerId = toggle.getAttribute("data-viewer");
+  const viewerEl = document.getElementById(viewerId);
+  if (!viewerEl) return;
+
+  viewerEl.hidden = false;
+  toggle.setAttribute("aria-expanded", "true");
+
+  if (!viewerEl.dataset.initialized) {
+    initArchiveViewer(viewerEl);
+    viewerEl.dataset.initialized = "true";
+  }
+});

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | High Linn Farms</title>
+
+  <!-- Use the same CSS file as other pages -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body id="top" class="page-about">
+  <!-- TOP BAR (same as Contact) -->
+  <div class="top-bar">
+    <div class="top-bar-info">
+
+      <!-- LEFT SIDE: DATE & TIME -->
+      <div class="top-left-info">
+        <span id="date">Fri, 1/23/26</span>
+        <span id="clock">4:53 PM</span>
+      </div>
+
+      <!-- RIGHT SIDE: WEATHER -->
+      <div class="top-right-info">
+        <div class="weather-container">
+          <span id="weather-link" class="weather-link">
+            <span class="weather-icon">🌥</span>
+            <span class="weather-text">Clouds, 19°F</span>
+            <span class="weather-caret">▾</span>
+          </span>
+
+          <div id="weather-panel" class="weather-panel hidden">
+            <div id="weather-location" class="weather-detail">📍 Prescott, KS</div>
+            <div id="weather-updated" class="weather-detail">Updated: ——</div>
+            <div id="wind" class="weather-detail">💨 Wind: ——</div>
+            <div id="humidity" class="weather-detail">💧 Humidity: ——</div>
+            <div id="feels-like" class="weather-detail">👆 Feels Like: ——°F</div>
+
+            <div class="weather-city-select">
+              <input
+                type="text"
+                id="weather-city-input"
+                placeholder="City, State or Zip"
+                title="Example: Prescott, KS or 66767"
+                class="weather-input"
+              />
+              <small class="weather-hint">Example: Prescott, KS or ZIP</small>
+              <button id="weather-city-submit" class="weather-button">Update</button>
+            </div>
+
+            <div id="multi-forecast" class="multi-forecast">
+              <div class="forecast-day">
+                <span class="day-label">Tomorrow</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 2</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 3</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 4</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 5</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HEADER / NAV (same structure as Contact) -->
+  <header class="site-header">
+    <div class="logo-bar">
+      <img src="images/logo-horizontal.png" alt="High Linn Farms logo" class="header-logo" />
+      <h1 class="site-title">High Linn Farms</h1>
+    </div>
+
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a class="active" href="about.html">About</a></li>
+        <li><a href="properties.html">Properties</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="farm-talk.html">Farm Talk</a></li>
+        <li><a href="contact.html">Contact &amp; Directions</a></li>
+        <li><a href="stay.html">Stay With Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- PAGE BANNER -->
+  <section class="page-banner">
+    <h1>About High Linn Farms</h1>
+  </section>
+
+  <!-- MAIN CONTENT (replaces Contact/Directions/Map/Formspree) -->
+  <main class="policy-page">
+
+   <!-- SECTION 1 -->
+<section class="ancestor card" id="walter-j">
+
+  <h2 class="section-kicker">Our Story Begins Here</h2>
+  <h3 class="ancestor-title">Go West Young Soldier — To Kansas</h3>
+
+  <div class="ancestor-layout">
+
+    <div class="ancestor-text">
+      <p>
+        Walter J. Sutherland was born January 4, 1844, in Edmeston, New York.
+        By the age of 16 his family had moved to Wheeling, Illinois, and at the age of 20
+        he answered his country's call and enlisted in Company B of the 132nd Illinois Infantry,
+        mustered in at Camp Fry in Chicago on June 1, 1864.
+      </p>
+
+      <p>
+        He served as a Union soldier during the final year of the Civil War, stationed on
+        garrison duty in Paducah, Kentucky, and may have participated in the July 27, 1864
+        skirmish at Haddix Ferry against Confederate guerrillas. Walter was honorably
+        discharged on October 17, 1864, in Chicago.
+      </p>
+
+      <p>
+        Within two years of returning home, the young veteran headed west to Kansas,
+        arriving in East Sheridan Township, Linn County around 1866, with his wife,
+        Adaline (Blackman) and daughter Harriet. By 1869 he purchased a homestead near
+        the Kansas-Missouri line and eventually became one of the prominent landowners
+        of the Prescott community.
+      </p>
+
+      <p>
+        Walter and Adaline raised their family between their in-town home in Prescott
+        and their farm in East Sheridan Township. Adaline passed May 30, 1889, and
+        Walter passed on February 21, 1923.
+      </p>
+
+      <button class="viewer-toggle" type="button" data-viewer="viewer-walter-j">
+        View photos &amp; documents →
+      </button>
+    </div>
+
+    <figure class="ancestor-portrait">
+      <img
+        src="archives/walter-j/portrait.jpg"
+        alt="Walter J. Sutherland portrait"
+        loading="lazy"
+      />
+      <figcaption>Walter J. Sutherland</figcaption>
+    </figure>
+
+  </div>
+
+  <div class="media-viewer" id="viewer-walter-j" hidden>
+    <div class="viewer-toolbar">
+      <button class="viewer-close" type="button">Close ✕</button>
+
+      <div class="viewer-nav">
+        <button class="viewer-prev" type="button">← Prev</button>
+        <span class="viewer-counter">1 / 2</span>
+        <button class="viewer-next" type="button">Next →</button>
+      </div>
+    </div>
+
+    <div class="viewer-stage"></div>
+    <div class="viewer-thumbs"></div>
+  </div>
+
+</section>
+
+    <!-- SECTION 2 -->
+    <section class="contact-card" style="margin-top: 22px;">
+      <h2>Where We Are</h2>
+      <p>
+        We’re in the southeast part of Kansas on the outskirts of Prescott, Kansas, near the far southern edge of
+        the Kansas City / Overland Park metro area, with a major 4-lane highway along the western edge of the property.
+      </p>
+      <p class="contact-small">
+        <!-- Optional: add a sentence about the feel of the land / what visitors see -->
+        Rolling ground, open skies, and reminders of early-1900s development still visible today.
+      </p>
+    </section>
+
+    <!-- SECTION 3 (placeholder for later) -->
+    <section class="contact-card" style="margin-top: 22px;">
+      <h2>Restoration &amp; Stewardship</h2>
+      <p>
+        <!-- TODO: Replace -->
+        We’re working to restore and preserve structures and details from a bygone era—while keeping the farm working and welcoming.
+      </p>
+      <ul>
+        <li><!-- TODO --> Project highlight #1</li>
+        <li><!-- TODO --> Project highlight #2</li>
+        <li><!-- TODO --> Project highlight #3</li>
+      </ul>
+    </section>
+
+  </main>
+
+ 
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <img src="images/logo-horizontal.png" alt="High Linn Farms Logo" class="footer-logo">
+      <p class="footer-name">High Linn Farms</p>
+      <p class="footer-credit">Site by John Sutherland</p>
+    </div>
+
+    <div class="footer-right">
+      <p class="footer-section-title">Contact</p>
+
+      <div class="footer-item">
+        <span class="footer-label">Mailing Address:</span>
+        <span class="footer-value">
+          PO Box 117<br>
+          Mound City, Kansas 66056
+        </span>
+      </div>
+
+      <div class="footer-item">
+        <span class="footer-label">Email:</span>
+        <span class="footer-value">
+          <a class="footer-link" href="mailto:info@highlinnfarms.com">info@highlinnfarms.com</a>
+        </span>
+      </div>
+
+      <div class="footer-item">
+        <span class="footer-label">Phone:</span>
+        <span class="footer-value">
+          <a class="footer-link" href="tel:+19133962259">(913) 396-2259</a>
+        </span>
+      </div>
+
+    </div>
+  </div> <!-- ✅ closes .footer-content -->
+
+   <hr class="footer-divider">
+
+    <div class="footer-bottom">
+
+      <div class="footer-bottom-row">
+        <div class="footer-legal-links">
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Use</a>
+        </div>
+
+        <a class="back-to-top" href="#top">↑ Top</a>
+      </div>
+
+      <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
+
+    </div>
+
+  
+</footer>
+
+   <script src="js/scripts.js"></script>
+ 
+</body>
+</html>
