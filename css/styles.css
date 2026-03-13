@@ -1257,6 +1257,14 @@ body.page-contact .page-banner{
   border-color: rgba(0,0,0,0.35);
 }
 
+.viewer-caption {
+  margin: 10px 16px 14px;
+  font-size: 0.9rem;
+  color: #555;
+  font-style: italic;
+  text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .ancestor-layout {
