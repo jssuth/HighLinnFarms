@@ -613,7 +613,26 @@ const ARCHIVE_ITEMS = {
       label: "Later Years",
       src: "archives/walter-j/clippings-later-years.html"
     }
-  ]
+  ],
+
+  "viewer-walter-mason": [
+  {
+    type: "image",
+    title: "Mason & Maud",
+    label: "Portrait",
+    src: "archives/walter-mason/mason-maud.jpg"
+  }
+],
+
+"viewer-carl-mason": [
+  {
+    type: "image",
+    title: "Carl & Mary Jane",
+    label: "Portrait",
+    src: "archives/carl-mason/carl-mary.jpg"
+  }
+]
+
 };
 
 function renderArchiveStage(stageEl, item) {
