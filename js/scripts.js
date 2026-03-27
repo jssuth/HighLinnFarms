@@ -621,8 +621,16 @@ const ARCHIVE_ITEMS = {
     title: "Mason & Maud",
     label: "Portrait",
     src: "archives/walter-mason/mason-maud.jpg"
+  },
+  {
+    type: "image",
+    title: "Family at the Farm",
+    label: "Farm 1912",
+    caption: "Taken in 1912 in the yard of their farmhouse east of Prescott. Mason is holding the mules, daughter Florence (Kite) holds the horse that son Billy, age 4, is riding. Maude is seated with baby Carl on her lap and Mildred stands beside her. Billy died in July 1919 as the result of a fall from a horse.",
+    src: "archives/walter-mason/mason-country-home.jpg"
   }
 ],
+
 
 "viewer-carl-mason": [
   {
