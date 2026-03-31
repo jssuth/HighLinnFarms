@@ -631,15 +631,29 @@ const ARCHIVE_ITEMS = {
   }
 ],
 
-
 "viewer-carl-mason": [
   {
     type: "image",
     title: "Carl & Mary Jane",
-    label: "Portrait",
+    label: "Together",
     src: "archives/carl-mason/carl-mary.jpg"
+  },
+  {
+    type: "image",
+    title: "Carl at Mizzou",
+    label: "Carl 1933",
+    caption: "Carl Mason Sutherland, Delta Sigma Phi fraternity portrait, University of Missouri, 1933.",
+    src: "archives/carl-mason/carl-portrait.jpg"
+  },
+  {
+    type: "image",
+    title: "Mary Jane Portrait",
+    label: "Mary Jane",
+    caption: "Mary Jane Harryman, portrait photograph, circa mid-1930s.",
+    src: "archives/carl-mason/maryj-portrait.jpg"
   }
 ]
+
 
 };
 
