@@ -905,10 +905,17 @@ const SEASONAL_PHOTOS = {
         caption: "Deer browse the timber as seen right from the cabin deck"
       }
     ]
+  },
+  prescott: {
+    winter: [],
+    spring: [],
+    summer: [],
+    fall: []
   }
 };
 
 const SEASON_COMING_SOON = {
+  winter: { icon: "❄️", label: "Winter" },
   spring: { icon: "🌱", label: "Spring" },
   summer: { icon: "☀️", label: "Summer" },
   fall:   { icon: "🍂", label: "Fall" }
