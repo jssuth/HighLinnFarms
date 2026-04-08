@@ -1015,6 +1015,13 @@ body.page-contact .page-banner{
     height: 320px;
 }
 
+body.page-properties .page-banner {
+    background-image: url("../images/properties-banner.jpg");
+    background-position: center 55%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 320px;
+}
 
 /* Banner title */
 .page-banner h1 {
