@@ -849,8 +849,62 @@ const SEASONAL_PHOTOS = {
         caption: "A tom turkey fans his tail for the hens on a frosty spring morning"
       }
     ],
-    summer: [],
-    fall: []
+    summer: [
+      {
+        src: "images/properties/pleasanton/pleasanton-summer-01-cabin.jpg",
+        caption: "The Pleasanton cabin in full summer — green lawn and lush canopy"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-summer-02-putting-green.jpg",
+        caption: "The property's own putting green tucked into the summer timber"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-summer-03-timber-trail.jpg",
+        caption: "A winding trail through the oak timber on a summer day"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-summer-04-woodland.jpg",
+        caption: "Summer shade beneath the oak canopy — cool and quiet"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-summer-05-field-view.jpg",
+        caption: "Looking out across the open meadow to the timber beyond"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-summer-06-gate-drive.jpg",
+        caption: "The rustic gate marks the entrance — the drive winds into the trees"
+      }
+    ],
+    fall: [
+      {
+        src: "images/properties/pleasanton/pleasanton-fall-01-cabin-foliage.jpg",
+        caption: "The cabin nestled in peak fall color — golden oaks all around"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-fall-02-canopy.jpg",
+        caption: "Fall color sweeps through the canopy — yellows, oranges, and greens"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-fall-03-late-fall.jpg",
+        caption: "Late fall in the timber — leaf-covered ground and a pop of color"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-fall-04-trail.jpg",
+        caption: "A sunlit fall trail winds through the bare oaks"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-fall-05-sunset.jpg",
+        caption: "A Kansas fall sunset — pink and purple skies through the timber"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-fall-06-turkeys.jpg",
+        caption: "Two tom turkeys fan out in a full fall display"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-fall-07-deer-deck.jpg",
+        caption: "Deer browse the timber as seen right from the cabin deck"
+      }
+    ]
   }
 };
 
