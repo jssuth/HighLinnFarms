@@ -1287,3 +1287,295 @@ body.page-properties .page-banner {
     text-align: center;
   }
 }
+
+
+/* ============================================================
+   PROPERTIES PAGE — Property Sections & Seasonal Tab Viewer
+   ============================================================ */
+
+.property-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+.property-section + .property-section {
+  border-top: 2px solid var(--hlf-mauve);
+}
+
+.property-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+.property-intro-text h2 {
+  font-size: 2rem;
+  color: var(--hlf-field-green);
+  margin-bottom: 12px;
+}
+
+.property-intro-text .property-tagline {
+  font-size: 1.05rem;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.property-intro-text p {
+  line-height: 1.75;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.property-aerial-wrap {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+
+.property-aerial-wrap img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Seasonal Tab Viewer --- */
+
+.seasonal-viewer {
+  background: #f8f6f1;
+  border-radius: 12px;
+  padding: 32px 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.seasonal-viewer h3 {
+  font-size: 1.4rem;
+  color: var(--hlf-field-green);
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* Tab buttons */
+.season-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0;
+}
+
+.season-tab {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #666;
+  border-radius: 6px 6px 0 0;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.season-tab:hover {
+  color: var(--hlf-field-green);
+  background: rgba(107,174,86,0.07);
+}
+
+.season-tab.active[data-season="winter"] {
+  color: #3a7ab0;
+  border-bottom-color: #3a7ab0;
+  background: rgba(58,122,176,0.07);
+}
+
+.season-tab.active[data-season="spring"] {
+  color: var(--hlf-field-green);
+  border-bottom-color: var(--hlf-field-green);
+  background: rgba(107,174,86,0.09);
+}
+
+.season-tab.active[data-season="summer"] {
+  color: #c08800;
+  border-bottom-color: #c08800;
+  background: rgba(249,217,35,0.1);
+}
+
+.season-tab.active[data-season="fall"] {
+  color: #b05020;
+  border-bottom-color: #b05020;
+  background: rgba(176,80,32,0.08);
+}
+
+/* Season panels */
+.season-panel {
+  display: none;
+}
+
+.season-panel.active {
+  display: block;
+}
+
+/* Coming soon panel */
+.season-coming-soon {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+}
+
+.season-coming-soon .season-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.season-coming-soon p {
+  font-size: 1.05rem;
+  font-style: italic;
+}
+
+/* Photo gallery */
+.season-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Main photo stage */
+.season-stage {
+  position: relative;
+  background: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  max-height: 480px;
+}
+
+.season-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.season-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+  color: #fff;
+  padding: 24px 16px 12px;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Prev/Next nav */
+.season-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.season-nav-btn {
+  background: var(--hlf-field-green);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  width: 42px;
+  height: 42px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.season-nav-btn:hover {
+  background: #2d6e18;
+}
+
+.season-counter {
+  font-size: 0.85rem;
+  color: #666;
+  flex: 1;
+  text-align: center;
+}
+
+/* Thumbnail strip */
+.season-thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.season-thumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 5px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s, opacity 0.2s;
+  opacity: 0.65;
+}
+
+.season-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.season-thumb.active,
+.season-thumb:hover {
+  opacity: 1;
+}
+
+.season-thumb.active {
+  border-color: var(--hlf-field-green);
+}
+
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  .property-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .property-aerial-wrap img {
+    height: 220px;
+  }
+
+  .seasonal-viewer {
+    padding: 20px 14px;
+  }
+
+  .season-tabs {
+    gap: 2px;
+  }
+
+  .season-tab {
+    padding: 9px 12px;
+    font-size: 0.88rem;
+  }
+
+  .season-thumb {
+    width: 64px;
+    height: 48px;
+  }
+}

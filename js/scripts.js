@@ -793,3 +793,186 @@ document.addEventListener("click", (event) => {
     viewerEl.dataset.initialized = "true";
   }
 });
+
+
+// ============================================================
+// SEASONAL TAB VIEWER — Properties Page
+// ============================================================
+
+const SEASONAL_PHOTOS = {
+  pleasanton: {
+    winter: [
+      {
+        src: "images/properties/pleasanton/pleasanton-winter-01-cabin.jpg",
+        caption: "The Pleasanton cabin under heavy snowfall"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-winter-02-icicle-view.jpg",
+        caption: "Winter sun through icicles — view from the deck"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-winter-03-snowy-woods.jpg",
+        caption: "Fresh snow blankets the oak woodland"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-winter-04-snowy-oaks.jpg",
+        caption: "Heavy snow bends the oak canopy into sweeping arches"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-winter-05-turkeys.jpg",
+        caption: "Wild turkeys foraging through the snowy hillside"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-winter-06-deer.jpg",
+        caption: "A herd of whitetail deer move through the timber"
+      }
+    ],
+    spring: [],
+    summer: [],
+    fall: []
+  }
+};
+
+const SEASON_COMING_SOON = {
+  spring: { icon: "🌱", label: "Spring" },
+  summer: { icon: "☀️", label: "Summer" },
+  fall:   { icon: "🍂", label: "Fall" }
+};
+
+function initSeasonalViewer(viewerEl) {
+  const property = viewerEl.dataset.property;
+  if (!property || !SEASONAL_PHOTOS[property]) return;
+
+  const tabs = viewerEl.querySelectorAll(".season-tab");
+  const panels = viewerEl.querySelectorAll(".season-panel");
+
+  // Track current index per season
+  const currentIndex = {};
+  Object.keys(SEASONAL_PHOTOS[property]).forEach(s => { currentIndex[s] = 0; });
+
+  function renderPanel(season) {
+    const panel = viewerEl.querySelector(`.season-panel[data-season="${season}"]`);
+    if (!panel) return;
+    const photos = SEASONAL_PHOTOS[property][season];
+
+    panel.innerHTML = "";
+
+    if (!photos || photos.length === 0) {
+      // Coming soon
+      const info = SEASON_COMING_SOON[season] || { icon: "📷", label: season };
+      panel.innerHTML = `
+        <div class="season-coming-soon">
+          <span class="season-icon">${info.icon}</span>
+          <p>${info.label} photos coming soon — check back later!</p>
+        </div>`;
+      return;
+    }
+
+    // Build gallery
+    const gallery = document.createElement("div");
+    gallery.className = "season-gallery";
+
+    // Stage
+    const stage = document.createElement("div");
+    stage.className = "season-stage";
+    const img = document.createElement("img");
+    img.src = photos[currentIndex[season]].src;
+    img.alt = photos[currentIndex[season]].caption;
+    const caption = document.createElement("div");
+    caption.className = "season-caption";
+    caption.textContent = photos[currentIndex[season]].caption;
+    stage.appendChild(img);
+    stage.appendChild(caption);
+
+    // Nav row
+    const nav = document.createElement("div");
+    nav.className = "season-nav";
+
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "season-nav-btn";
+    prevBtn.setAttribute("aria-label", "Previous photo");
+    prevBtn.innerHTML = "&#8592;";
+
+    const counter = document.createElement("div");
+    counter.className = "season-counter";
+    counter.textContent = `${currentIndex[season] + 1} / ${photos.length}`;
+
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "season-nav-btn";
+    nextBtn.setAttribute("aria-label", "Next photo");
+    nextBtn.innerHTML = "&#8594;";
+
+    nav.appendChild(prevBtn);
+    nav.appendChild(counter);
+    nav.appendChild(nextBtn);
+
+    // Thumbs
+    const thumbsRow = document.createElement("div");
+    thumbsRow.className = "season-thumbs";
+
+    photos.forEach((photo, i) => {
+      const thumb = document.createElement("div");
+      thumb.className = "season-thumb" + (i === currentIndex[season] ? " active" : "");
+      const tImg = document.createElement("img");
+      tImg.src = photo.src;
+      tImg.alt = photo.caption;
+      tImg.loading = "lazy";
+      thumb.appendChild(tImg);
+
+      thumb.addEventListener("click", () => {
+        currentIndex[season] = i;
+        renderPanel(season);
+      });
+      thumbsRow.appendChild(thumb);
+    });
+
+    gallery.appendChild(stage);
+    gallery.appendChild(nav);
+    gallery.appendChild(thumbsRow);
+    panel.appendChild(gallery);
+
+    // Prev / Next handlers
+    prevBtn.addEventListener("click", () => {
+      currentIndex[season] = (currentIndex[season] - 1 + photos.length) % photos.length;
+      renderPanel(season);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentIndex[season] = (currentIndex[season] + 1) % photos.length;
+      renderPanel(season);
+    });
+  }
+
+  // Tab switching
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const season = tab.dataset.season;
+
+      tabs.forEach(t => t.classList.remove("active"));
+      panels.forEach(p => p.classList.remove("active"));
+
+      tab.classList.add("active");
+      const activePanel = viewerEl.querySelector(`.season-panel[data-season="${season}"]`);
+      if (activePanel) {
+        activePanel.classList.add("active");
+        if (!activePanel.dataset.rendered) {
+          renderPanel(season);
+          activePanel.dataset.rendered = "true";
+        }
+      }
+    });
+  });
+
+  // Render the default active tab (winter)
+  const defaultSeason = viewerEl.querySelector(".season-tab.active")?.dataset.season || "winter";
+  renderPanel(defaultSeason);
+  const defaultPanel = viewerEl.querySelector(`.season-panel[data-season="${defaultSeason}"]`);
+  if (defaultPanel) {
+    defaultPanel.dataset.rendered = "true";
+  }
+}
+
+// Auto-init all seasonal viewers on page load
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".seasonal-viewer[data-property]").forEach(initSeasonalViewer);
+});
