@@ -827,7 +827,28 @@ const SEASONAL_PHOTOS = {
         caption: "A herd of whitetail deer move through the timber"
       }
     ],
-    spring: [],
+    spring: [
+      {
+        src: "images/properties/pleasanton/pleasanton-spring-01-cabin.jpg",
+        caption: "Early spring at the cabin — new timber retaining walls taking shape"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-spring-02-green-woods.jpg",
+        caption: "The oak woodland bursts to life with fresh spring green"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-spring-03-hailstorm.jpg",
+        caption: "A spring hailstorm rolls through the timber — Kansas weather at its finest"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-spring-04-oak-sky.jpg",
+        caption: "Spring arriving — first green buds beneath towering oaks"
+      },
+      {
+        src: "images/properties/pleasanton/pleasanton-spring-05-turkeys.jpg",
+        caption: "A tom turkey fans his tail for the hens on a frosty spring morning"
+      }
+    ],
     summer: [],
     fall: []
   }
