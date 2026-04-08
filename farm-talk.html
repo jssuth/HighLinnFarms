@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farm Talk | High Linn Farms</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body id="top" class="page-farm-talk">
+
+  <div class="top-bar">
+    <div class="top-bar-info">
+
+      <!-- LEFT SIDE: DATE & TIME -->
+      <div class="top-left-info">
+        <span id="date">Fri, 1/23/26</span>
+        <span id="clock">4:53 PM</span>
+      </div>
+
+      <!-- RIGHT SIDE: WEATHER -->
+      <div class="top-right-info">
+        <div class="weather-container">
+          <span id="weather-link" class="weather-link">
+            <span class="weather-icon">🌥</span>
+            <span class="weather-text">Clouds, 19°F</span>
+            <span class="weather-caret">▾</span>
+          </span>
+
+          <div id="weather-panel" class="weather-panel hidden">
+            <div id="weather-location" class="weather-detail">📍 Prescott, KS</div>
+            <div id="weather-updated" class="weather-detail">Updated: ——</div>
+            <div id="wind" class="weather-detail">💨 Wind: ——</div>
+            <div id="humidity" class="weather-detail">💧 Humidity: ——</div>
+            <div id="feels-like" class="weather-detail">👆 Feels Like: ——°F</div>
+
+            <div class="weather-city-select">
+              <input
+                type="text"
+                id="weather-city-input"
+                placeholder="City, State or Zip"
+                title="Example: Prescott, KS or 66767"
+                class="weather-input"
+              />
+              <small class="weather-hint">Example: Prescott, KS or ZIP</small>
+              <button id="weather-city-submit" class="weather-button">Update</button>
+            </div>
+
+            <div id="multi-forecast" class="multi-forecast">
+              <div class="forecast-day">
+                <span class="day-label">Tomorrow</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 2</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 3</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 4</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+              <div class="forecast-day">
+                <span class="day-label">Day 5</span>
+                <span class="day-icon">☁️</span>
+                <span class="day-temp">--°F</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HEADER / NAV -->
+  <header class="site-header">
+
+    <div class="logo-bar">
+      <img src="images/logo-horizontal.png" alt="High Linn Farms logo" class="header-logo" />
+      <h1 class="site-title">High Linn Farms</h1>
+    </div>
+
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="properties.html">Properties</a></li>
+        <!-- <li><a href="gallery.html">Gallery</a></li> -->
+        <li><a class="active" href="farm-talk.html">Farm Talk</a></li>
+        <li><a href="contact.html">Contact & Directions</a></li>
+        <li><a href="stay.html">Stay With Us</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <!-- PAGE BANNER -->
+  <section class="page-banner">
+    <h1>Farm Talk</h1>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="farm-talk-main">
+
+    <p class="farm-talk-intro">
+      Practical information for farmers, landowners, and gardeners — drawn from years of working
+      Kansas ground and the trusted research of K-State Extension. Browse by topic or dig into
+      an article below.
+    </p>
+
+    <!-- Category filter pills -->
+    <div class="category-bar">
+      <button class="category-pill active" data-category="all">All Topics</button>
+      <button class="category-pill" data-category="ponds">Ponds &amp; Water</button>
+      <button class="category-pill" data-category="crops">Crops &amp; Hay</button>
+      <button class="category-pill" data-category="wildlife">Wildlife</button>
+      <button class="category-pill" data-category="garden">Garden</button>
+    </div>
+
+    <!-- Article Grid -->
+    <div class="article-grid">
+
+      <!-- ========================================
+           ARTICLE 1 — Algae in Kansas Farm Ponds
+           ======================================== -->
+      <article class="article-card" data-category="ponds">
+
+        <div class="article-card-inner">
+          <div class="article-meta">
+            <span class="article-category">Ponds &amp; Water</span>
+            <span class="article-date">Spring 2025</span>
+          </div>
+
+          <h2 class="article-title">Understanding Algae Growth in Kansas Farm Ponds</h2>
+
+          <p class="article-summary">
+            Algae blooms are one of the most common — and most misunderstood — challenges on
+            Kansas farms. Learn what's really driving that green water, which types are harmless
+            and which are dangerous, and what you can do about it without breaking the bank.
+          </p>
+
+          <div class="article-actions">
+            <button class="btn-read-article">Read Article</button>
+            <a class="btn-download-pdf" href="farm-talk/algae-kansas-farm-ponds.pdf" target="_blank">
+              📄 Download PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Expandable full article -->
+        <div class="article-full">
+
+          <h3>Why Do Farm Ponds Get Algae?</h3>
+          <p>
+            Algae growth in farm ponds is driven primarily by excess nutrients — especially
+            phosphorus and nitrogen — combined with warm temperatures and sunlight. Runoff from
+            fertilized fields, livestock waste near the water's edge, and decomposing organic
+            matter on the pond bottom all contribute to nutrient loading. Once nutrients reach a
+            tipping point, algae populations can explode seemingly overnight.
+          </p>
+          <p>
+            Kansas summers are practically ideal for algae: warm shallow water, long sunny days,
+            and limited wind mixing in smaller ponds. The result is the bright green "pea soup"
+            appearance many landowners know well.
+          </p>
+
+          <h3>Types of Algae — and Why It Matters</h3>
+          <p>
+            Not all algae are created equal. The most common types you'll encounter in Kansas ponds include:
+          </p>
+          <ul>
+            <li><strong>Filamentous (string) algae</strong> — forms green mats that float or cling to the bottom. Unsightly but generally not toxic.</li>
+            <li><strong>Planktonic algae</strong> — microscopic, turns water green or brown. Can include harmless green algae or dangerous cyanobacteria.</li>
+            <li><strong>Blue-green algae (cyanobacteria)</strong> — this is the one to watch. Certain species produce toxins that can kill livestock, dogs, and fish. It often appears as a blue-green or olive scum concentrated on the downwind shore.</li>
+          </ul>
+          <p>
+            If your pond smells musty or like rotting plants, and you see a surface scum that
+            looks like spilled paint or thick pea soup, treat it as potentially toxic until
+            confirmed otherwise. Keep livestock and pets away.
+          </p>
+
+          <h3>Management Options</h3>
+          <p>
+            There's no single fix for pond algae, but a combination of approaches works well
+            for most Kansas farm ponds:
+          </p>
+          <ul>
+            <li><strong>Reduce nutrient inputs</strong> — fence livestock out of the pond and direct runoff away from the water's edge. This is the most impactful long-term step.</li>
+            <li><strong>Aeration</strong> — a bottom diffuser or surface aerator improves oxygen levels, discourages cyanobacteria, and helps the pond self-clean. Most cost-effective option for actively managed ponds.</li>
+            <li><strong>Copper sulfate</strong> — a traditional treatment for green water. Effective but must be applied carefully; overuse can crash oxygen levels and kill fish. Always follow label rates based on pond volume.</li>
+            <li><strong>Biological controls</strong> — grass carp can control submerged vegetation (which competes with algae for nutrients), but require a Kansas permit. Barley straw is a slower natural option sometimes used in smaller ponds.</li>
+            <li><strong>Dredging</strong> — when nutrient-rich sediment has built up on the bottom over decades, dredging removes the internal nutrient source. It's a significant investment but can reset a pond's health for many years.</li>
+          </ul>
+
+          <h3>When to Call for Help</h3>
+          <p>
+            If you're dealing with repeated toxic algae blooms, fish kills, or a pond that
+            hasn't responded to treatment, it may be time to bring in a professional. K-State
+            Research &amp; Extension offers pond management resources and can connect you with
+            local specialists. The Kansas Department of Health and Environment (KDHE) can also
+            test water samples when toxic algae is suspected.
+          </p>
+
+          <!-- Resource links -->
+          <div class="article-resources">
+            <h4>📚 K-State Extension Resources</h4>
+            <ul>
+              <li>
+                <a href="https://bookstore.ksre.ksu.edu/item/identification-and-management-of-blue-green-algae-in-farm-ponds_MF3065" target="_blank" rel="noopener">
+                  Identification and Management of Blue-Green Algae in Farm Ponds (MF3065)
+                </a>
+              </li>
+              <li>
+                <a href="https://www.ksre.k-state.edu/news/stories/2022/05/agriculture-cleaning-algae-in-ponds.html" target="_blank" rel="noopener">
+                  Cleaning Algae in Ponds — K-State Research &amp; Extension News
+                </a>
+              </li>
+              <li>
+                <a href="https://bookstore.ksre.ksu.edu/topic/environment-and-natural-resources/farm-ponds" target="_blank" rel="noopener">
+                  K-State Farm Ponds Publication Library
+                </a>
+              </li>
+            </ul>
+          </div>
+
+        </div><!-- /.article-full -->
+
+      </article><!-- /.article-card -->
+
+    </div><!-- /.article-grid -->
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <img src="images/logo-horizontal.png" alt="High Linn Farms Logo" class="footer-logo">
+        <p class="footer-name">High Linn Farms</p>
+        <p class="footer-credit">Site by John Sutherland</p>
+      </div>
+
+      <div class="footer-right">
+        <p class="footer-section-title">Contact</p>
+
+        <div class="footer-item">
+          <span class="footer-label">Mailing Address:</span>
+          <span class="footer-value">
+            PO Box 117<br>
+            Mound City, Kansas 66056
+          </span>
+        </div>
+
+        <div class="footer-item">
+          <span class="footer-label">Email:</span>
+          <span class="footer-value">
+            <a class="footer-link" href="mailto:info@highlinnfarms.com">info@highlinnfarms.com</a>
+          </span>
+        </div>
+
+        <div class="footer-item">
+          <span class="footer-label">Phone:</span>
+          <span class="footer-value">
+            <a class="footer-link" href="tel:+19133962259">(913) 396-2259</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-row">
+        <div class="footer-legal-links">
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Use</a>
+        </div>
+
+        <a class="back-to-top" href="#top">↑ Top</a>
+      </div>
+
+      <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/scripts.js"></script>
+</body>
+</html>

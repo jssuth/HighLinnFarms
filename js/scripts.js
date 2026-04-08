@@ -1058,3 +1058,58 @@ function initSeasonalViewer(viewerEl) {
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".seasonal-viewer[data-property]").forEach(initSeasonalViewer);
 });
+
+
+// ================================================
+// FARM TALK — Category filter pills
+// ================================================
+document.addEventListener("DOMContentLoaded", () => {
+  const pills = document.querySelectorAll(".category-pill");
+  const cards = document.querySelectorAll(".article-card");
+
+  if (pills.length && cards.length) {
+    pills.forEach(pill => {
+      pill.addEventListener("click", () => {
+        pills.forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+
+        const cat = pill.dataset.category;
+        cards.forEach(card => {
+          if (cat === "all" || card.dataset.category === cat) {
+            card.style.display = "";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      });
+    });
+  }
+});
+
+
+// ================================================
+// FARM TALK — Article expand / collapse
+// ================================================
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".btn-read-article").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const card = btn.closest(".article-card");
+      const full = card ? card.querySelector(".article-full") : null;
+      if (!full) return;
+
+      const isOpen = full.classList.contains("open");
+
+      if (isOpen) {
+        full.classList.remove("open");
+        btn.textContent = "Read Article";
+        btn.classList.remove("open");
+      } else {
+        full.classList.add("open");
+        btn.textContent = "Close Article";
+        btn.classList.add("open");
+        // Smooth scroll to card top so expanded content is visible
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+});
