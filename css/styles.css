@@ -1903,4 +1903,78 @@ body.page-farm-talk .page-banner {
     font-size: 1.15rem;
   }
 }
+
+/* ---- Print button ---- */
+.btn-print-article {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  color: #666;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-print-article:hover {
+  background: #f0ede6;
+  color: #333;
+}
+
+/* ---- Seasonal note ---- */
+.farm-talk-seasonal-note {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e8e4dc;
+}
+
+/* ---- Have a Question callout ---- */
+.farm-talk-question {
+  margin-top: 2.5rem;
+  background: linear-gradient(135deg, #eef4e8, #f5f2ea);
+  border: 1px solid #c8dbb8;
+  border-radius: 12px;
+  padding: 2rem 2rem;
+  text-align: center;
+}
+
+.farm-talk-question h3 {
+  font-size: 1.2rem;
+  color: var(--hlf-field-green);
+  margin-bottom: 0.5rem;
+}
+
+.farm-talk-question p {
+  color: #555;
+  font-size: 0.97rem;
+  margin-bottom: 1.2rem;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-ask-question {
+  display: inline-block;
+  background: var(--hlf-field-green);
+  color: #fff;
+  border-radius: 7px;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-ask-question:hover {
+  background: #2f6d17;
+  color: #fff;
+  text-decoration: none;
+}
 }
