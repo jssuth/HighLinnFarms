@@ -1006,6 +1006,12 @@ a.back-to-top:focus-visible{
     background: rgba(0, 0, 0, 0.22);
 }
 
+/* About page banner override (Sutherland cemetery, wide shot) */
+body.page-about .page-banner {
+  background-image: url("../images/about-banner.jpg");
+  background-position: center 40%;
+}
+
 /* Contact page banner override (vertical road image) */
 body.page-contact .page-banner{
     background-image: url("../images/RedRoadSide.jpeg");
