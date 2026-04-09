@@ -1904,6 +1904,33 @@ body.page-farm-talk .page-banner {
   }
 }
 
+/* ---- PDF description block ---- */
+.article-pdf-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 0.8rem 1.8rem 0;
+  padding: 0.9rem 1rem;
+  background: #f5f2ea;
+  border-left: 3px solid var(--hlf-field-green);
+  border-radius: 0 6px 6px 0;
+}
+
+.pdf-description {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ---- Photo credit ---- */
+.photo-credit {
+  font-size: 0.78rem;
+  color: #888;
+  font-style: italic;
+  margin: -0.6rem 0 1.2rem;
+  text-align: right;
+}
+
 /* ---- Print button ---- */
 .btn-print-article {
   display: inline-flex;
