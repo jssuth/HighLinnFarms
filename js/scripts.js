@@ -1061,6 +1061,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // ================================================
+// PRESCOTT — Simple Photo Gallery Lightbox
+// This runs automatically on the Properties page.
+// When a visitor clicks any photo in the Prescott gallery,
+// it opens a full-screen viewer with the caption, a photo
+// counter (e.g. "3 / 17"), and left/right arrow navigation.
+// Keyboard also works: arrow keys to navigate, Escape to close.
+// You do not need to edit this section — it picks up new photos
+// automatically as long as they are added to the HTML gallery grid.
+// ================================================
+
+function initPrescottGallery() {
+  const gallery = document.getElementById("prescott-gallery");
+  if (!gallery) return;
+
+  const lightbox  = document.getElementById("prescott-lightbox");
+  const lbImg     = document.getElementById("lightbox-img");
+  const lbCaption = document.getElementById("lightbox-caption");
+  const lbCounter = document.getElementById("lightbox-counter");
+  const lbClose   = lightbox.querySelector(".lightbox-close");
+  const lbPrev    = lightbox.querySelector(".lightbox-prev");
+  const lbNext    = lightbox.querySelector(".lightbox-next");
+
+  const items = Array.from(gallery.querySelectorAll(".gallery-item"));
+  let currentIdx = 0;
+
+  function showItem(idx) {
+    currentIdx = (idx + items.length) % items.length;
+    const img = items[currentIdx].querySelector("img");
+    const cap = items[currentIdx].querySelector("figcaption");
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbCaption.textContent = cap ? cap.textContent : "";
+    lbCounter.textContent = `${currentIdx + 1} / ${items.length}`;
+  }
+
+  function openLightbox(idx) {
+    showItem(idx);
+    lightbox.hidden = false;
+    document.body.style.overflow = "hidden";
+    lbClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  // Wire up each gallery item
+  items.forEach((item, idx) => {
+    const cap = item.querySelector("figcaption");
+    item.setAttribute("tabindex", "0");
+    item.setAttribute("role", "button");
+    item.setAttribute("aria-label", cap ? cap.textContent : "View photo");
+
+    item.addEventListener("click", () => openLightbox(idx));
+    item.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openLightbox(idx);
+      }
+    });
+  });
+
+  lbClose.addEventListener("click", closeLightbox);
+  lbPrev.addEventListener("click",  () => showItem(currentIdx - 1));
+  lbNext.addEventListener("click",  () => showItem(currentIdx + 1));
+
+  // Click outside inner content to close
+  lightbox.addEventListener("click", e => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Keyboard navigation
+  document.addEventListener("keydown", e => {
+    if (lightbox.hidden) return;
+    if (e.key === "Escape")     closeLightbox();
+    if (e.key === "ArrowLeft")  showItem(currentIdx - 1);
+    if (e.key === "ArrowRight") showItem(currentIdx + 1);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initPrescottGallery);
+
+
+// ================================================
 // FARM TALK — Category filter pills
 // ================================================
 document.addEventListener("DOMContentLoaded", () => {

@@ -1012,6 +1012,13 @@ body.page-about .page-banner {
   background-position: center 40%;
 }
 
+/* Stay With Us page banner (Pleasanton cabin in fall color) */
+body.page-stay .page-banner {
+  background-image: url("../images/properties/pleasanton/pleasanton-fall-01-cabin-foliage.jpg");
+  background-position: center 72%;
+  height: 160px;
+}
+
 /* Contact page banner override (vertical road image) */
 body.page-contact .page-banner{
     background-image: url("../images/RedRoadSide.jpeg");
@@ -1673,6 +1680,27 @@ body.page-farm-talk .page-banner {
   display: block;
 }
 
+/* Single inline photo inside expanded article */
+.article-inline-photo {
+  margin: 20px 0 24px;
+}
+
+.article-inline-photo img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.article-inline-photo figcaption {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #777;
+  font-style: italic;
+  margin-top: 6px;
+}
+
 /* Before / After photo pair inside expanded article */
 .before-after {
   display: grid;
@@ -2004,4 +2032,411 @@ body.page-farm-talk .page-banner {
   color: #fff;
   text-decoration: none;
 }
+
+
+/* ============================================================
+   PRESCOTT PROPERTY — PHOTO GALLERY
+   Controls the look of the photo grid on the Properties page.
+   - gallery-grid: how many photos per row (3 on desktop, 2 on tablet, 1 on phone)
+   - gallery-item: the individual photo card with hover effect
+   - gallery-lightbox: the full-screen viewer that opens when you click a photo
+   To change photos per row, edit: grid-template-columns: repeat(3, 1fr)
+   ============================================================ */
+
+.prescott-gallery {
+  margin-top: 8px;
+}
+
+.gallery-section-header {
+  margin: 40px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--hlf-mauve);
+}
+
+.gallery-section-header:first-child {
+  margin-top: 16px;
+}
+
+.gallery-section-header h3 {
+  font-size: 1.25rem;
+  color: var(--hlf-field-green);
+  margin-bottom: 6px;
+}
+
+.gallery-section-header p {
+  font-size: 0.93rem;
+  color: #555;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 720px;
+}
+
+/* Grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+/* Individual item */
+.gallery-item {
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #f0ede6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-item:hover,
+.gallery-item:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  outline: none;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+}
+
+.gallery-item figcaption {
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  color: #555;
+  background: #fff;
+  line-height: 1.4;
+}
+
+/* ---- Lightbox overlay ---- */
+
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.gallery-lightbox[hidden] {
+  display: none;
+}
+
+.lightbox-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+}
+
+.lightbox-inner img {
+  max-width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+}
+
+.lightbox-caption {
+  color: #ddd;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 14px;
+  max-width: 620px;
+  line-height: 1.5;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.6rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 12px;
+  opacity: 0.75;
+  transition: opacity 0.15s;
+}
+
+.lightbox-close:hover {
+  opacity: 1;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  font-size: 2.4rem;
+  cursor: pointer;
+  padding: 16px 18px;
+  border-radius: 5px;
+  line-height: 1;
+  transition: background 0.2s;
+}
+
+.lightbox-prev { left: 10px; }
+.lightbox-next { right: 10px; }
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.lightbox-counter {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lightbox-prev { left: 4px; padding: 12px 12px; }
+  .lightbox-next { right: 4px; padding: 12px 12px; }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-item img {
+    height: 240px;
+  }
+}
+}
+
+
+/* ============================================================
+   STAY WITH US PAGE
+   Controls layout and appearance of the Stay With Us page.
+   - stay-intro: the opening paragraph at the top
+   - stay-jump-links: the two green buttons (Pleasanton / Prescott)
+   - stay-body: two-column layout (description left, feature list right)
+   - stay-options: the three option cards per property
+   - stay-cta: the green inquiry button at the bottom of each section
+   - btn-stay-inquire: style of the inquiry button itself
+   ============================================================ */
+
+.stay-intro {
+  max-width: 820px;
+  margin: 0 auto 8px;
+  padding: 20px 24px 0;
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.7;
+}
+
+.stay-jump-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.stay-jump-links a {
+  display: inline-block;
+  background: var(--hlf-field-green);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.stay-jump-links a:hover {
+  background: #2f6d17;
+  color: #fff;
+  text-decoration: none;
+}
+
+.stay-divider {
+  border: none;
+  border-top: 2px solid var(--hlf-mauve);
+  margin: 28px 0;
+}
+
+.stay-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+.stay-section-header {
+  margin-bottom: 28px;
+}
+
+.stay-section-header h2 {
+  font-size: 2rem;
+  color: var(--hlf-field-green);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.stay-tagline {
+  font-size: 1.05rem;
+  color: #666;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Two-column: description + highlights */
+.stay-body {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 36px;
+  margin-bottom: 28px;
+  align-items: start;
+}
+
+.stay-description p {
+  line-height: 1.78;
+  color: #333;
+  margin-bottom: 14px;
+}
+
+.stay-highlights h3 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--hlf-field-green);
+  margin-bottom: 12px;
+}
+
+.stay-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stay-feature-list li {
+  padding: 6px 0 6px 22px;
+  position: relative;
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.stay-feature-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--hlf-field-green);
+  font-weight: 700;
+}
+
+/* Option cards */
+.stay-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stay-option-card {
+  background: #f8f6f1;
+  border: 1px solid #e8e4dc;
+  border-radius: 10px;
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.stay-option-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.stay-option-card h3 {
+  font-size: 1rem;
+  color: var(--hlf-field-green);
+  margin-bottom: 10px;
+}
+
+.stay-option-card p {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* CTA button */
+.stay-cta {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.btn-stay-inquire {
+  display: inline-block;
+  background: var(--hlf-field-green);
+  color: #fff;
+  border-radius: 7px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-stay-inquire:hover {
+  background: #2f6d17;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Bottom note */
+.stay-note {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, #eef4e8, #f5f2ea);
+  border: 1px solid #c8dbb8;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stay-body {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .stay-section-header h2 {
+    font-size: 1.6rem;
+  }
 }
