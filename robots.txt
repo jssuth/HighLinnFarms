@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Keep policy pages out of search results
+Disallow: /privacy.html
+Disallow: /terms.html
+
+Sitemap: https://highlinnfarms.com/sitemap.xml
