@@ -259,10 +259,6 @@ async function updateWeather() {
 }
 
 
-
-
-   // end updateWeather
-
 async function updateMultiDayForecast(lat, lon) {
 
   const { apiKey } = weatherConfig;
@@ -357,12 +353,20 @@ weatherLink.addEventListener('click', (e) => {
 const cityInput = document.getElementById("weather-city-input");
 const citySubmit = document.getElementById("weather-city-submit");
 
+// When the submit button is clicked, read the input and figure out
+// what kind of location was entered: ZIP code, City+State, or city name only.
+// Each case is handled separately because the OpenWeather API requires
+// different URL formats depending on what is provided.
 citySubmit.addEventListener("click", async () => {
   const city = cityInput.value.trim();
-  if (!city) return;
+  if (!city) return; // Do nothing if the box is empty
 
-  // ZIP detection (5 digits)
-if (/^\d{5}$/.test(city)) {
+  // -----------------------------------------------
+  // CASE 1: ZIP CODE (exactly 5 digits)
+  // Use the OpenWeather "zip" endpoint directly —
+  // it returns coordinates plus a city name and country code.
+  // -----------------------------------------------
+  if (/^\d{5}$/.test(city)) {
     try {
         const apiKey = weatherConfig.apiKey;
         const zipUrl = `https://api.openweathermap.org/data/2.5/weather?zip=${city},US&units=imperial&appid=${apiKey}`;
@@ -374,42 +378,47 @@ if (/^\d{5}$/.test(city)) {
             return;
         }
 
-        // Update config with ZIP coordinates
+        // Store the returned coordinates so updateWeather() uses them
         weatherConfig.lat = data.coord.lat;
         weatherConfig.lon = data.coord.lon;
 
-        // Update location label
+        // Show the resolved city name in the panel header
         const locEl = document.getElementById("weather-location");
         locEl.innerText = `📍 ${data.name}, ${data.sys.country}`;
 
-        // Refresh weather
+        // Pull fresh weather data for the new location
         updateWeather();
 
-        // Clear input
+        // Clear the input field
         cityInput.value = "";
-        return; // STOP — do not run city/state logic
+        return; // Done — skip the city/state logic below
     } catch (err) {
         console.error("ZIP lookup error:", err);
         alert("ZIP lookup failed.");
         return;
     }
-}
+  }
 
-// ===============================
-// CITY + STATE HANDLING (Option #2)
-// ===============================
-
-if (city.includes(",")) {
+  // -----------------------------------------------
+  // CASE 2: CITY + STATE (or City + Country)
+  // Detected by the presence of a comma, e.g. "Topeka, KS"
+  // or "London, GB". The state/country portion is checked
+  // against a full US state list. If it matches a US state,
+  // the search is formatted for the OpenWeather geocoder as
+  // "City,ST,US". If not, it falls through to a foreign
+  // country lookup using just "City,CountryCode".
+  // -----------------------------------------------
+  if (city.includes(",")) {
     const parts = city.split(",").map(p => p.trim());
 
     if (parts.length === 2) {
         const cityName = parts[0];
         let statePart = parts[1].toLowerCase();
 
-        // Special case: OpenWeather uses GB, not UK
+        // OpenWeather uses "GB" for the United Kingdom, not "UK"
         if (statePart === "uk") statePart = "gb";
 
-        // Full list of US states
+        // Full lookup table: accepts full state name or 2-letter abbreviation
         const states = {
             "alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR",
             "california": "CA", "colorado": "CO", "connecticut": "CT", "delaware": "DE",
@@ -426,15 +435,16 @@ if (city.includes(",")) {
             "wisconsin": "WI", "wyoming": "WY"
         };
 
-        // Convert full state name → abbreviation
+        // If a full state name was typed (e.g. "Kansas"), convert it to its abbreviation
         if (states[statePart]) {
             statePart = states[statePart];
         }
 
-        // If valid 2‑letter abbreviation
+        // Check whether the second part is a valid US state abbreviation
         const validAbbrev = Object.values(states);
         if (validAbbrev.includes(statePart.toUpperCase())) {
 
+            // Format required by OpenWeather geocoder: "City,ST,US"
             const formatted = `${cityName},${statePart.toUpperCase()},US`;
             const coords = await getCoordinatesForCity(formatted);
 
@@ -451,10 +461,10 @@ if (city.includes(",")) {
 
             updateWeather();
             cityInput.value = "";
-            return; // STOP — do not run fallback
+            return; // Done — skip the fallback below
         }
 
-        // Foreign country case (e.g., London, GB)
+        // Not a US state — try as a foreign city+country (e.g., "London, GB")
         const formattedForeign = `${cityName},${statePart}`;
         const coordsForeign = await getCoordinatesForCity(formattedForeign);
 
@@ -470,9 +480,13 @@ if (city.includes(",")) {
             return;
         }
     }
-}
+  }
 
-
+  // -----------------------------------------------
+  // CASE 3: PLAIN CITY NAME ONLY (e.g., "Denver")
+  // Last resort — send the name as-is to the geocoder.
+  // Works for many cities but is less precise without a state.
+  // -----------------------------------------------
   const coords = await getCoordinatesForCity(city);
 
   if (!coords) {
@@ -480,23 +494,41 @@ if (city.includes(",")) {
     return;
   }
 
-  // Update config
+  // Update the stored coordinates with what the geocoder returned
   weatherConfig.lat = coords.lat;
   weatherConfig.lon = coords.lon;
 
-  // Update location label
+  // Show the resolved location name in the panel header
   const locEl = document.getElementById("weather-location");
   locEl.innerText = `📍 ${coords.name}`;
 
-  // Refresh weather
+  // Refresh weather with new coordinates
   updateWeather();
 
   // Clear the text box
   cityInput.value = "";
 });
 
-//About page viewer logic
+// ============================================================
+// ABOUT PAGE — INLINE VIEWER (IIFE)
+// This block handles the inline media viewer used on the About
+// page for items like the farm map or document viewer panels.
+// It is wrapped in an immediately-invoked function expression
+// (IIFE) so that its internal variables stay private and do
+// not conflict with other scripts on the page.
+//
+// How it works:
+//   - Each viewer panel in the HTML has a [data-viewer-open] trigger button.
+//   - Clicking the button finds the matching viewer element by ID,
+//     runs setupViewer() on it the first time (lazy init), then
+//     makes it visible and scrolls it into view.
+//   - Inside setupViewer(), the viewer reads its own thumbnail
+//     buttons to build the item list, then wires up prev/next/close.
+// ============================================================
 (function () {
+
+  // Sets up a single viewer panel.
+  // Called once per viewer the first time it is opened.
   function setupViewer(viewerEl) {
     const thumbsWrap = viewerEl.querySelector("[data-items]");
     const thumbs = Array.from(thumbsWrap.querySelectorAll(".thumb"));
@@ -507,18 +539,21 @@ if (city.includes(",")) {
     const nextBtn = viewerEl.querySelector("[data-next]");
     const closeBtn = viewerEl.querySelector("[data-viewer-close]");
 
-    let index = 0;
+    let index = 0; // Tracks which item is currently displayed
 
+    // Displays item at position i (wraps around at the ends).
+    // Updates the active thumbnail highlight, swaps the visible
+    // media element (image or PDF iframe), and updates the counter.
     function show(i) {
-      index = (i + thumbs.length) % thumbs.length;
+      index = (i + thumbs.length) % thumbs.length; // Wrap around
       thumbs.forEach(t => t.classList.remove("is-active"));
       const active = thumbs[index];
       active.classList.add("is-active");
 
       const src = active.getAttribute("data-src");
-      const kind = active.getAttribute("data-kind");
+      const kind = active.getAttribute("data-kind"); // "image" or "pdf"
 
-      // swap media type
+      // Hide both media elements, then show only the correct one
       imgEl.classList.remove("is-active");
       pdfEl.classList.remove("is-active");
 
@@ -531,9 +566,11 @@ if (city.includes(",")) {
         imgEl.classList.add("is-active");
       }
 
+      // Update the "1 / 3" counter if present
       if (countEl) countEl.textContent = `${index + 1} / ${thumbs.length}`;
     }
 
+    // Clicking a thumbnail jumps directly to that item
     thumbs.forEach((btn, i) => {
       btn.addEventListener("click", () => show(i));
     });
@@ -544,15 +581,16 @@ if (city.includes(",")) {
     closeBtn.addEventListener("click", () => {
       viewerEl.classList.remove("is-open");
       viewerEl.setAttribute("aria-hidden", "true");
-      // reset to first item (portrait) when closing
-      show(0);
+      show(0); // Reset to the first item (portrait) when closing
     });
 
-    // initialize
-    show(0);
+    show(0); // Show the first item immediately on setup
   }
 
-  // Open buttons
+  // Wire up all [data-viewer-open] trigger buttons on the page.
+  // Each button stores the ID of the viewer it should open.
+  // The viewer is initialized lazily — only on first open —
+  // to avoid processing panels that are never viewed.
   document.querySelectorAll("[data-viewer-open]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.getAttribute("data-viewer-open");
@@ -560,6 +598,7 @@ if (city.includes(",")) {
       if (!viewer) return;
 
       if (!viewer.dataset.ready) {
+        // First open: run setup, then mark as initialized
         setupViewer(viewer);
         viewer.dataset.ready = "true";
       }
@@ -657,16 +696,23 @@ const ARCHIVE_ITEMS = {
 
 };
 
+// Clears the stage area and renders a single archive item into it.
+// Supports three item types:
+//   "image" — creates an <img> tag, appending a caption below if provided
+//   "html"  — creates an <iframe> pointing to an HTML file (e.g. newspaper clippings)
+//   "pdf"   — creates an <iframe> pointing to a PDF file
+// Items are defined in ARCHIVE_ITEMS above, keyed by viewer ID.
 function renderArchiveStage(stageEl, item) {
-  stageEl.innerHTML = "";
+  stageEl.innerHTML = ""; // Clear any previously rendered content
 
   if (item.type === "image") {
     const img = document.createElement("img");
     img.src = item.src;
     img.alt = item.title || "Image";
-    img.loading = "lazy";
+    img.loading = "lazy"; // Defer loading until visible
     stageEl.appendChild(img);
     if (item.caption) {
+      // Add descriptive caption below the image if one is defined
       const cap = document.createElement("p");
       cap.className = "viewer-caption";
       cap.textContent = item.caption;
@@ -676,6 +722,7 @@ function renderArchiveStage(stageEl, item) {
   }
 
   if (item.type === "html") {
+    // Render an HTML archive page (e.g. newspaper clippings) inside an iframe
     const iframe = document.createElement("iframe");
     iframe.src = item.src;
     iframe.title = item.title || "Archive item";
@@ -685,6 +732,7 @@ function renderArchiveStage(stageEl, item) {
   }
 
   if (item.type === "pdf") {
+    // Render a PDF document inside an iframe
     const iframe = document.createElement("iframe");
     iframe.src = item.src;
     iframe.title = item.title || "Document";
@@ -693,10 +741,18 @@ function renderArchiveStage(stageEl, item) {
   }
 }
 
+// Builds (or rebuilds) the thumbnail strip beneath the stage area.
+// If there is only one item, the strip is hidden — no point showing
+// a single tab. For image items, a small preview image is used.
+// For HTML and PDF items, a text label button is shown instead
+// (since there is no image to use as a preview).
+// The onPick callback is called with the selected index when a
+// thumbnail is clicked, allowing the caller to update its state.
 function buildArchiveThumbs(thumbsEl, items, activeIndex, onPick) {
-  thumbsEl.innerHTML = "";
+  thumbsEl.innerHTML = ""; // Rebuild from scratch each time
 
   if (items.length <= 1) {
+    // Only one item — no need for a thumbnail strip
     thumbsEl.style.display = "none";
     return;
   }
@@ -710,12 +766,14 @@ function buildArchiveThumbs(thumbsEl, items, activeIndex, onPick) {
     btn.title = item.title || `Item ${index + 1}`;
 
     if (item.type === "image") {
+      // Use the actual image as the thumbnail
       const img = document.createElement("img");
       img.src = item.src;
       img.alt = item.title || "Thumbnail";
       img.loading = "lazy";
       btn.appendChild(img);
     } else {
+      // For HTML/PDF items, use a short text label as the tab button
       btn.textContent = item.label || (item.type === "html" ? "Article" : "PDF");
       btn.style.fontWeight = "700";
       btn.style.padding = "18px 10px";
@@ -727,10 +785,17 @@ function buildArchiveThumbs(thumbsEl, items, activeIndex, onPick) {
   });
 }
 
+// Initializes one archive viewer panel.
+// Looks up the viewer's ID in ARCHIVE_ITEMS to get its item list,
+// then sets up the stage, counter, thumbnail strip, and navigation.
+// The internal updateViewer() function re-renders everything each
+// time the selected item changes (prev/next/thumb click).
+// When closed, the viewer resets to the first item (portrait) so
+// it always opens fresh the next time.
 function initArchiveViewer(viewerEl) {
   const viewerId = viewerEl.id;
-  const items = ARCHIVE_ITEMS[viewerId] || [];
-  if (!items.length) return;
+  const items = ARCHIVE_ITEMS[viewerId] || []; // Pull items from the data object above
+  if (!items.length) return; // Nothing to display — exit early
 
   const stage = viewerEl.querySelector(".viewer-stage");
   const thumbs = viewerEl.querySelector(".viewer-thumbs");
@@ -739,47 +804,58 @@ function initArchiveViewer(viewerEl) {
   const nextBtn = viewerEl.querySelector(".viewer-next");
   const closeBtn = viewerEl.querySelector(".viewer-close");
 
-  let currentIndex = 0;
+  let currentIndex = 0; // Start at the first item
 
+  // Re-renders the stage, counter, and thumbnail strip for the current index.
+  // Disables prev/next buttons when there is only one item.
   function updateViewer() {
     renderArchiveStage(stage, items[currentIndex]);
     counter.textContent = `${currentIndex + 1} / ${items.length}`;
 
+    // Rebuild thumbs; pass a callback so clicking a thumb updates currentIndex
     buildArchiveThumbs(thumbs, items, currentIndex, (newIndex) => {
       currentIndex = newIndex;
       updateViewer();
     });
 
+    // Disable navigation when only one item exists
     const single = items.length <= 1;
     prevBtn.disabled = single;
     nextBtn.disabled = single;
   }
 
   prevBtn.onclick = () => {
-    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    currentIndex = (currentIndex - 1 + items.length) % items.length; // Wrap backward
     updateViewer();
   };
 
   nextBtn.onclick = () => {
-    currentIndex = (currentIndex + 1) % items.length;
+    currentIndex = (currentIndex + 1) % items.length; // Wrap forward
     updateViewer();
   };
 
   closeBtn.onclick = () => {
     viewerEl.hidden = true;
-    currentIndex = 0; // reset to portrait
+    currentIndex = 0; // Reset to the first item (portrait) on close
     updateViewer();
 
+    // Update the aria-expanded state on the toggle button that opened this viewer
     const toggle = document.querySelector(`[data-viewer="${viewerId}"]`);
     if (toggle) toggle.setAttribute("aria-expanded", "false");
   };
 
-  updateViewer();
+  updateViewer(); // Render the initial state
 }
 
+// Event delegation for opening archive viewers.
+// Rather than attaching a listener to every toggle button individually,
+// a single listener on the document catches all clicks and checks
+// whether the clicked element (or any of its parents) is a .viewer-toggle.
+// This approach works even if toggle buttons are added to the page later.
+// Each toggle stores the ID of its target viewer in a data-viewer attribute.
 document.addEventListener("click", (event) => {
   const toggle = event.target.closest(".viewer-toggle");
-  if (!toggle) return;
+  if (!toggle) return; // Click was not on a viewer toggle — ignore it
 
   const viewerId = toggle.getAttribute("data-viewer");
   const viewerEl = document.getElementById(viewerId);
@@ -789,6 +865,7 @@ document.addEventListener("click", (event) => {
   toggle.setAttribute("aria-expanded", "true");
 
   if (!viewerEl.dataset.initialized) {
+    // Run setup the first time this viewer is opened, then mark it done
     initArchiveViewer(viewerEl);
     viewerEl.dataset.initialized = "true";
   }
@@ -906,12 +983,8 @@ const SEASONAL_PHOTOS = {
       }
     ]
   },
-  prescott: {
-    winter: [],
-    spring: [],
-    summer: [],
-    fall: []
-  }
+  // Prescott uses a lightbox gallery (see initPrescottGallery below)
+  // rather than the seasonal tab viewer, so no entry is needed here.
 };
 
 const SEASON_COMING_SOON = {
@@ -921,26 +994,43 @@ const SEASON_COMING_SOON = {
   fall:   { icon: "🍂", label: "Fall" }
 };
 
+// Initializes one seasonal photo viewer for a given property.
+// Each viewer is a self-contained widget with four tabs (Winter, Spring,
+// Summer, Fall). Clicking a tab swaps the visible photo panel and renders
+// that season's gallery if it has not been rendered yet (lazy rendering —
+// panels are only built when first opened, not all at once on page load).
+//
+// Inside each season panel, the gallery is built entirely in JavaScript:
+// a large stage image with caption, a prev/next navigation row with a
+// counter, and a row of small thumbnail images beneath.
+//
+// Photo data comes from the SEASONAL_PHOTOS object above, keyed by the
+// property name stored in the viewer element's data-property attribute.
+// If a season has no photos yet, a "coming soon" placeholder is shown.
 function initSeasonalViewer(viewerEl) {
-  const property = viewerEl.dataset.property;
-  if (!property || !SEASONAL_PHOTOS[property]) return;
+  const property = viewerEl.dataset.property; // e.g. "pleasanton" or "prescott"
+  if (!property || !SEASONAL_PHOTOS[property]) return; // Guard: unknown property
 
   const tabs = viewerEl.querySelectorAll(".season-tab");
   const panels = viewerEl.querySelectorAll(".season-panel");
 
-  // Track current index per season
+  // Keep a separate photo index for each season so switching tabs
+  // and back does not reset the position within a season's gallery.
   const currentIndex = {};
   Object.keys(SEASONAL_PHOTOS[property]).forEach(s => { currentIndex[s] = 0; });
 
+  // Builds (or rebuilds) the gallery for one season inside its panel.
+  // Called once per season on first open, and again whenever the user
+  // navigates to a different photo (prev/next/thumbnail click).
   function renderPanel(season) {
     const panel = viewerEl.querySelector(`.season-panel[data-season="${season}"]`);
     if (!panel) return;
     const photos = SEASONAL_PHOTOS[property][season];
 
-    panel.innerHTML = "";
+    panel.innerHTML = ""; // Clear previous content before rebuilding
 
+    // If the season array is empty, show a friendly placeholder
     if (!photos || photos.length === 0) {
-      // Coming soon
       const info = SEASON_COMING_SOON[season] || { icon: "📷", label: season };
       panel.innerHTML = `
         <div class="season-coming-soon">
@@ -950,11 +1040,11 @@ function initSeasonalViewer(viewerEl) {
       return;
     }
 
-    // Build gallery
+    // Outer wrapper for the whole gallery layout
     const gallery = document.createElement("div");
     gallery.className = "season-gallery";
 
-    // Stage
+    // --- Stage: large image + caption ---
     const stage = document.createElement("div");
     stage.className = "season-stage";
     const img = document.createElement("img");
@@ -966,14 +1056,14 @@ function initSeasonalViewer(viewerEl) {
     stage.appendChild(img);
     stage.appendChild(caption);
 
-    // Nav row
+    // --- Navigation row: ← counter → ---
     const nav = document.createElement("div");
     nav.className = "season-nav";
 
     const prevBtn = document.createElement("button");
     prevBtn.className = "season-nav-btn";
     prevBtn.setAttribute("aria-label", "Previous photo");
-    prevBtn.innerHTML = "&#8592;";
+    prevBtn.innerHTML = "&#8592;"; // Left arrow character
 
     const counter = document.createElement("div");
     counter.className = "season-counter";
@@ -982,13 +1072,15 @@ function initSeasonalViewer(viewerEl) {
     const nextBtn = document.createElement("button");
     nextBtn.className = "season-nav-btn";
     nextBtn.setAttribute("aria-label", "Next photo");
-    nextBtn.innerHTML = "&#8594;";
+    nextBtn.innerHTML = "&#8594;"; // Right arrow character
 
     nav.appendChild(prevBtn);
     nav.appendChild(counter);
     nav.appendChild(nextBtn);
 
-    // Thumbs
+    // --- Thumbnail strip ---
+    // Small clickable preview images below the navigation row.
+    // The active thumbnail gets the "active" CSS class for highlighting.
     const thumbsRow = document.createElement("div");
     thumbsRow.className = "season-thumbs";
 
@@ -998,9 +1090,10 @@ function initSeasonalViewer(viewerEl) {
       const tImg = document.createElement("img");
       tImg.src = photo.src;
       tImg.alt = photo.caption;
-      tImg.loading = "lazy";
+      tImg.loading = "lazy"; // Defer thumbnail loading until visible
       thumb.appendChild(tImg);
 
+      // Clicking a thumbnail jumps directly to that photo and re-renders
       thumb.addEventListener("click", () => {
         currentIndex[season] = i;
         renderPanel(season);
@@ -1008,12 +1101,13 @@ function initSeasonalViewer(viewerEl) {
       thumbsRow.appendChild(thumb);
     });
 
+    // Assemble the gallery: stage → nav → thumbs
     gallery.appendChild(stage);
     gallery.appendChild(nav);
     gallery.appendChild(thumbsRow);
     panel.appendChild(gallery);
 
-    // Prev / Next handlers
+    // Wire up prev/next buttons — wrap around at the ends
     prevBtn.addEventListener("click", () => {
       currentIndex[season] = (currentIndex[season] - 1 + photos.length) % photos.length;
       renderPanel(season);
@@ -1025,19 +1119,26 @@ function initSeasonalViewer(viewerEl) {
     });
   }
 
-  // Tab switching
+  // --- Tab switching ---
+  // When a season tab is clicked, deactivate all tabs and panels,
+  // then activate only the selected tab and its matching panel.
+  // Each panel is rendered lazily on first open using data-rendered
+  // so the browser is not doing unnecessary work up front.
   tabs.forEach(tab => {
     tab.addEventListener("click", () => {
-      const season = tab.dataset.season;
+      const season = tab.dataset.season; // e.g. "winter", "spring"
 
+      // Deactivate everything first
       tabs.forEach(t => t.classList.remove("active"));
       panels.forEach(p => p.classList.remove("active"));
 
+      // Activate the clicked tab and its panel
       tab.classList.add("active");
       const activePanel = viewerEl.querySelector(`.season-panel[data-season="${season}"]`);
       if (activePanel) {
         activePanel.classList.add("active");
         if (!activePanel.dataset.rendered) {
+          // First time this season has been opened — build its gallery
           renderPanel(season);
           activePanel.dataset.rendered = "true";
         }
@@ -1045,16 +1146,20 @@ function initSeasonalViewer(viewerEl) {
     });
   });
 
-  // Render the default active tab (winter)
+  // Render the default active tab on page load.
+  // Looks for whichever tab already has the "active" class in the HTML;
+  // falls back to "winter" if none is pre-selected.
   const defaultSeason = viewerEl.querySelector(".season-tab.active")?.dataset.season || "winter";
   renderPanel(defaultSeason);
   const defaultPanel = viewerEl.querySelector(`.season-panel[data-season="${defaultSeason}"]`);
   if (defaultPanel) {
-    defaultPanel.dataset.rendered = "true";
+    defaultPanel.dataset.rendered = "true"; // Mark as already rendered
   }
 }
 
-// Auto-init all seasonal viewers on page load
+// Find every seasonal viewer on the page and initialize it when the
+// DOM is fully loaded. Each viewer element must have a data-property
+// attribute matching a key in SEASONAL_PHOTOS (e.g. data-property="pleasanton").
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".seasonal-viewer[data-property]").forEach(initSeasonalViewer);
 });
@@ -1064,11 +1169,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // PRESCOTT — Simple Photo Gallery Lightbox
 // This runs automatically on the Properties page.
 // When a visitor clicks any photo in the Prescott gallery,
-// it opens a full-screen viewer with the caption, a photo
+// it opens a full-screen lightbox viewer with the caption, a photo
 // counter (e.g. "3 / 17"), and left/right arrow navigation.
-// Keyboard also works: arrow keys to navigate, Escape to close.
-// You do not need to edit this section — it picks up new photos
-// automatically as long as they are added to the HTML gallery grid.
+// Keyboard navigation is also supported: arrow keys move between
+// photos and Escape closes the lightbox.
+// New photos are picked up automatically as long as they are
+// added to the HTML gallery grid — no JavaScript changes needed.
 // ================================================
 
 function initPrescottGallery() {
@@ -1147,6 +1253,14 @@ document.addEventListener("DOMContentLoaded", initPrescottGallery);
 
 // ================================================
 // FARM TALK — Category filter pills
+// ------------------------------------------------
+// The Farm Talk page shows a row of category pills
+// (e.g. "All", "Wildlife", "Farming", "Family").
+// Clicking a pill hides all article cards that do
+// not match the selected category, and shows only
+// those that do. "All" always shows every card.
+// Each card stores its category in a data-category
+// attribute on the article card element.
 // ================================================
 document.addEventListener("DOMContentLoaded", () => {
   const pills = document.querySelectorAll(".category-pill");
@@ -1155,15 +1269,18 @@ document.addEventListener("DOMContentLoaded", () => {
   if (pills.length && cards.length) {
     pills.forEach(pill => {
       pill.addEventListener("click", () => {
+        // Deactivate all pills, then mark the clicked one active
         pills.forEach(p => p.classList.remove("active"));
         pill.classList.add("active");
 
-        const cat = pill.dataset.category;
+        const cat = pill.dataset.category; // The category to filter by
+
+        // Show cards that match; hide those that do not
         cards.forEach(card => {
           if (cat === "all" || card.dataset.category === cat) {
-            card.style.display = "";
+            card.style.display = ""; // Restore default display
           } else {
-            card.style.display = "none";
+            card.style.display = "none"; // Hide non-matching cards
           }
         });
       });
@@ -1174,25 +1291,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ================================================
 // FARM TALK — Article expand / collapse
+// ------------------------------------------------
+// Each article card on the Farm Talk page has a
+// "Read Article" button that toggles the full
+// article text open and closed. The full text lives
+// in a hidden .article-full element inside the card.
+// When opened, the page smoothly scrolls to the top
+// of the card so the expanded content is visible.
+// The button label also toggles between
+// "Read Article" and "Close Article" to reflect state.
 // ================================================
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".btn-read-article").forEach(btn => {
     btn.addEventListener("click", () => {
-      const card = btn.closest(".article-card");
+      const card = btn.closest(".article-card"); // The card containing this button
       const full = card ? card.querySelector(".article-full") : null;
-      if (!full) return;
+      if (!full) return; // Guard: no expandable content found
 
       const isOpen = full.classList.contains("open");
 
       if (isOpen) {
+        // Currently open — collapse it
         full.classList.remove("open");
         btn.textContent = "Read Article";
         btn.classList.remove("open");
       } else {
+        // Currently closed — expand it and scroll into view
         full.classList.add("open");
         btn.textContent = "Close Article";
         btn.classList.add("open");
-        // Smooth scroll to card top so expanded content is visible
         card.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     });
