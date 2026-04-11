@@ -663,10 +663,31 @@ const ARCHIVE_ITEMS = {
   },
   {
     type: "image",
+    title: "Mason & Maud — circa 1900",
+    label: "1900",
+    caption: "Walter Mason Sutherland and Maud, portrait taken at a studio in Pleasanton, KS — likely shortly after their Christmas Day 1900 wedding, when Mason was 27. The square and compass pin on his lapel reflects his lifelong membership in the Masonic fraternal order.",
+    src: "archives/walter-mason/mason-maud-portrait-1900.jpg"
+  },
+  {
+    type: "image",
     title: "Family at the Farm",
     label: "Farm 1912",
     caption: "Taken in 1912 in the yard of their farmhouse east of Prescott. Mason is holding the mules, daughter Florence (Kite) holds the horse that son Billy, age 4, is riding. Maude is seated with baby Carl on her lap and Mildred stands beside her. Billy died in July 1919 as the result of a fall from a horse.",
     src: "archives/walter-mason/mason-country-home.jpg"
+  },
+  {
+    type: "image",
+    title: "Prescott Post Office",
+    label: "Post Office",
+    caption: "Mason Sutherland standing before the Prescott post office — where he served as Postmaster from 1924 until his retirement in 1945. The brick storefront with large plate glass windows was a fixture on the Prescott main street for over two decades.",
+    src: "archives/walter-mason/mason-postoffice-prescott.jpg"
+  },
+  {
+    type: "image",
+    title: "The Building Today",
+    label: "Today",
+    caption: "The same Prescott building as it stands today — the brick front replaced with aluminum siding and the entrance relocated over the years. After Mason's retirement in 1945, son Carl converted it into a locker plant and grocery store, one of the few places in the area where families could rent freezer space to store meat. The east side shown here still reflects the original layout, including the carcass entry door and the walled-off smokehouse further down the alley.",
+    src: "archives/walter-mason/prescott-building-today.jpg"
   }
 ],
 
