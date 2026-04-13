@@ -182,6 +182,30 @@ a:focus-visible {
   background-color: #3c7a3c;
 }
 
+/* Distance tool (top bar) */
+.distance-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.distance-tool input {
+  padding: 4px 6px;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.distance-tool button {
+  padding: 4px 8px;
+  font-size: 0.7rem;
+  background: #2f5e2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 /* ========================= */
 /* HEADER — RESTORED         */
 /* ========================= */
@@ -310,6 +334,31 @@ a:focus-visible {
 .map-note{
   margin-top: 10px;
 }
+
+.directions-actions {
+  margin-top: 12px;
+}
+
+.directions-btn {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #3f6f2c;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.directions-btn:hover,
+.directions-btn:focus-visible {
+  background-color: #2f541f;
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
 
 /* Form */
 .contact-form-wrap{

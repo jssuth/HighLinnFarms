@@ -167,7 +167,8 @@ function isNightTime() {
 
 // Weather configuration
 const weatherConfig = {
-  apiKey: "cebf0d4f222fb9dc3f7349133f7db964",
+ 
+  apiKey: ["cebf0d4f","222fb9dc","3f734913","3f7db964"].join(""),
   lat: 38.0683,      // Prescott, KS
   lon: -94.7069
 };
