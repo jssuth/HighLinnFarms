@@ -291,13 +291,16 @@ a:focus-visible {
   grid-template-columns: 1fr 1fr;
   gap: 22px;
   margin-top: 18px;
+  align-items: stretch;
 }
 
 .contact-card{
   background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 8px 18px rgba(0,0,0,0.10);
-  padding: 18px 18px;
+  padding: 18px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .contact-card h2{
