@@ -2492,3 +2492,141 @@ body.page-farm-talk .page-banner {
     font-size: 1.6rem;
   }
 }
+
+/* ===========================================
+   PRINT STYLES — Farm Talk Articles
+   Hides everything except the open article
+   and formats it cleanly for print/PDF.
+   =========================================== */
+@media print {
+
+  /* Hide all site chrome */
+  header,
+  nav,
+  .page-banner,
+  .category-bar,
+  .farm-talk-question,
+  .farm-talk-seasonal-note,
+  .article-actions,
+  .article-pdf-block,
+  .btn-print-article,
+  .btn-read-article,
+  footer {
+    display: none !important;
+  }
+
+  /* Hide all article cards that are NOT expanded */
+  .article-card {
+    display: none !important;
+  }
+
+  /* Show only the expanded article */
+  .article-card.expanded {
+    display: block !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide the card thumbnail photo and summary — article-full has the content */
+  .article-card.expanded .article-card-photo {
+    display: none !important;
+  }
+
+  .article-card.expanded .article-card-inner {
+    padding: 0 !important;
+  }
+
+  /* Print header — site name + article title */
+  .article-card.expanded .article-title::before {
+    content: "High Linn Farms  ·  highlinnfarms.com";
+    display: block;
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #888;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .article-card.expanded .article-title {
+    font-size: 1.6rem;
+    line-height: 1.3;
+    margin-bottom: 0.3rem;
+    page-break-after: avoid;
+  }
+
+  .article-card.expanded .article-meta {
+    margin-bottom: 1.2rem;
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  /* Make sure the full article content is visible */
+  .article-card.expanded .article-full {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+  }
+
+  /* Clean body text for print */
+  body {
+    font-family: Georgia, serif;
+    font-size: 11pt;
+    color: #000;
+    background: #fff;
+    line-height: 1.7;
+  }
+
+  /* Photos */
+  .article-card.expanded .article-inline-photo img,
+  .article-card.expanded .before-after img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  .article-card.expanded figcaption {
+    font-size: 0.8rem;
+    color: #555;
+    font-style: italic;
+    margin-top: 0.3rem;
+  }
+
+  /* Resource links — print the URL after link text */
+  .article-resources a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75rem;
+    color: #666;
+  }
+
+  .article-resources h4 {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Page break control */
+  h2, h3 {
+    page-break-after: avoid;
+  }
+
+  p, figure {
+    page-break-inside: avoid;
+  }
+
+  /* Footer credit line at bottom of print */
+  .article-card.expanded .article-full::after {
+    content: "Printed from highlinnfarms.com  ·  High Linn Farms, Prescott & Pleasanton, Kansas";
+    display: block;
+    margin-top: 2rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid #ccc;
+    font-size: 0.75rem;
+    color: #888;
+    text-align: center;
+  }
+}

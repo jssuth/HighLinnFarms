@@ -1337,11 +1337,13 @@ document.addEventListener("DOMContentLoaded", () => {
         full.classList.remove("open");
         btn.textContent = "Read Article";
         btn.classList.remove("open");
+        card.classList.remove("expanded");
       } else {
         // Currently closed — expand it and scroll into view
         full.classList.add("open");
         btn.textContent = "Close Article";
         btn.classList.add("open");
+        card.classList.add("expanded");
         card.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     });
