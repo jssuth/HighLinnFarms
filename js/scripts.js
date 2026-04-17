@@ -615,45 +615,52 @@ citySubmit.addEventListener("click", async () => {
 // =====================================
 
 const ARCHIVE_ITEMS = {
+  
   "viewer-walter-j": [
-    {
-      type: "image",
-      title: "Portrait",
-      label: "Portrait",
-      src: "archives/walter-j/portrait.jpg"
-    },
-    {
-      type: "image",
-      title: "Farm Location",
-      label: "Farm ",
-      caption: "Location: Original farm of Walter J. Sutherland, ¼ mile west of the Kansas/Missouri State Line",
-      src: "archives/walter-j/farm-location.jpg"
-    },
-    {
-      type: "html",
-      title: "Prosperous Farmer (1899)",
-      label: "1899",
-      src: "archives/walter-j/article-1899-prosperous-farmer.html"
-    },
-    {
-      type: "html",
-      title: "Citizen of Prescott (1884–1887)",
-      label: "1884-87",
-      src: "archives/walter-j/clippings-citizen-of-prescott.html"
-    },
-    {
-      type: "html",
-      title: "On the Farm (1887–1901)",
-      label: "Farm Life",
-      src: "archives/walter-j/clippings-on-the-farm.html"
-    },
-    {
-      type: "html",
-      title: "Later Years & Family (1889–1921)",
-      label: "Later Years",
-      src: "archives/walter-j/clippings-later-years.html"
-    }
-  ],
+  {
+    type: "image",
+    title: "Portrait",
+    label: "Portrait",
+    src: "archives/walter-j/portrait.jpg"
+  },
+  {
+    type: "image",
+    title: "Farm Location",
+    label: "Farm ",
+    caption: "Location: Original farm of Walter J. Sutherland, ¼ mile west of the Kansas/Missouri State Line",
+    src: "archives/walter-j/farm-location.jpg"
+  },
+  {
+    type: "pdf",
+    title: "Civil War Record — Illinois State Archives",
+    label: "Civil War",
+    src: "archives/walter-j/civil-war-illinois-archive.pdf"
+  },
+  {
+    type: "html",
+    title: "Citizen of Prescott (1884–1887)",
+    label: "1884-87",
+    src: "archives/walter-j/clippings-citizen-of-prescott.html"
+  },
+  {
+    type: "html",
+    title: "On the Farm (1887–1901)",
+    label: "Farm Life",
+    src: "archives/walter-j/clippings-on-the-farm.html"
+  },
+  {
+    type: "html",
+    title: "Later Years & Family (1889–1921)",
+    label: "Later Years",
+    src: "archives/walter-j/clippings-later-years.html"
+  },
+  {
+    type: "html",
+    title: "Prosperous Farmer (1899)",
+    label: "1899",
+    src: "archives/walter-j/article-1899-prosperous-farmer.html"
+  }
+],
 
   "viewer-walter-mason": [
   {
