@@ -634,7 +634,7 @@ const ARCHIVE_ITEMS = {
     type: "pdf",
     title: "Civil War Record — Illinois State Archives",
     label: "Civil War",
-    src: "archives/walter-j/civil-war-illinois-archive.pdf"
+    src: "archives/walter-j/civil-war-illinois-archive.pdf#toolbar=0&navpanes=0&scrollbar=0"
   },
   {
     type: "html",
