@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- =============================================
+     STAY WITH US PAGE — stay.html
+     Two property sections side by side (Pleasanton first, Prescott
+     second) outlining what a stay can look like — home exchange,
+     working farm stays, heritage / restoration interest, and so on.
+     This page is content-only; no booking system. Every inquiry
+     button routes to the Contact page so arrangements can be
+     handled personally.
+     ============================================= -->
 <head>
   <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -19,6 +28,8 @@
 </head>
 
 <body id="top" class="page-stay">
+    <!-- TOP BAR — date / clock / weather. Same block on every main page;
+       see index.html for the full walk-through. -->
 
   <div class="top-bar">
   <div class="top-bar-info">
@@ -91,7 +102,8 @@
 
   </div>
 </div>
-
+   <!-- HEADER / NAV — same logo + nav as every page; "Stay With Us"
+       is marked active here. See index.html for the full description. -->
   <header class="site-header">
     <div class="logo-bar">
       <img src="images/logo-horizontal.png" alt="High Linn Farms logo" class="header-logo" />
@@ -108,7 +120,7 @@
       </ul>
     </nav>
   </header>
-
+   <!-- PAGE BANNER — narrow band under the nav with the page title. -->
   <section class="page-banner">
     <h1>Stay With Us</h1>
   </section>
@@ -122,7 +134,8 @@
          Update the text in each section as your plans develop.
          ============================================= -->
 
-    <!-- Intro paragraph + quick-jump buttons to each property -->
+    <!-- Intro paragraph + quick-jump buttons (the two anchor links)
+         that scroll the page down to each property's section. -->
     <section class="stay-intro">
       <p>
         High Linn Farms includes two very different properties — a timbered retreat near
@@ -146,6 +159,14 @@
          Home exchange only: someone stays here while we go somewhere else.
          No hunting. Wildlife watching, nature, timber experience.
          Update this section if plans change (e.g. if we ever open it for rental).
+
+         Layout pattern (same one used in the Prescott section below):
+           .stay-section-header — h2 title + tagline
+           .stay-body — two columns: write-up on the left, "What's
+             There" feature list on the right
+           .stay-options — row of small cards describing the ways to
+             stay (home exchange, conversation, etc.)
+           .stay-cta — the single big "Inquire" button, links to Contact
          ============================================= -->
     <section class="stay-section" id="stay-pleasanton">
 
@@ -233,6 +254,7 @@
          Three angles offered: working farm stay, heritage/restoration interest,
          and home exchange. Update this section as furnishings improve
          or as restoration work progresses on the outbuildings.
+         Uses the same layout pattern as the Pleasanton section above.
          ============================================= -->
     <section class="stay-section" id="stay-prescott">
 
@@ -337,7 +359,8 @@
     </section>
 
   </main>
-
+   <!-- SITE FOOTER — same two-column footer used on every main page.
+       See index.html for the full description. -->
   <footer class="site-footer">
     <div class="footer-content">
       <div class="footer-left">
@@ -386,7 +409,7 @@
       <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
     </div>
   </footer>
-
+  <!-- Site-wide script — clock, weather, and the other interactive pieces. -->
   <script src="js/scripts.js"></script>
 </body>
 </html>

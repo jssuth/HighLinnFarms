@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- =============================================
+     CONTACT & DIRECTIONS PAGE — contact.html
+     Three things in one: directions with an embedded Google map,
+     mailing / email / phone contact info, and a message form that
+     sends email through a service called Formspree so the address
+     itself never has to sit in the page where spam bots can scrape it.
+     ============================================= -->
 <head>
   <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -20,6 +27,8 @@
 </head>
 
 <body id="top" class="page-contact">
+   <!-- TOP BAR — date / clock / weather. Same block on every main page;
+       see index.html for the full walk-through. -->
 
   <div class="top-bar">
   <div class="top-bar-info">
@@ -93,8 +102,9 @@
 
   </div>
 </div>
-
-  <!-- HEADER / NAV: Copy your exact header/nav from index.html for consistency -->
+ <!-- HEADER / NAV — same logo + nav as every page; "Contact & Directions"
+       is marked active here. See index.html for the full description. -->
+  
   <header class="site-header">
 
   <div class="logo-bar">
@@ -107,7 +117,6 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="properties.html">Properties</a></li>
-     <!-- <li><a href="gallery.html">Gallery</a></li> -->
       <li><a href="farm-talk.html">Farm Talk</a></li>
       <li><a class="active" href="contact.html">Contact & Directions</a></li>
       <li><a href="stay.html">Stay With Us</a></li>
@@ -117,18 +126,27 @@
 
 
 </header>
-
-  <!-- PAGE HERO BAND (reuses your policy-header look if you have it) -->
+<!-- PAGE BANNER — narrow band under the nav with the page title. -->
   <section class="page-banner">
     <h1>Contact &amp; Directions</h1>
   </section>
 
 <main class="policy-page">
 
-  <!-- DIRECTIONS + MAP (now first) -->
+  <!-- =============================================
+       DIRECTIONS + CONTACT INFO ROW
+       Two cards side by side: directions / map on the left, written
+       contact info on the right. Stacks to one column on phones.
+       ============================================= -->
   <section class="contact-grid">
-
-    <!-- LEFT: Directions + Map -->
+  <!-- LEFT CARD: Directions + Map.
+         The iframe is Google Maps' standard embed for the Prescott
+         address — generated from Google Maps "Share > Embed a map".
+         To re-center the map on a different address, regenerate the
+         embed in Google Maps and replace this iframe src.
+         "Get Directions" sends the visitor to Google Maps with our
+         address pre-filled as the destination so their phone or
+         computer can route them from wherever they are. -->
     <div class="contact-card">
       <h2>Directions</h2>
       <p class="contact-small">
@@ -156,7 +174,9 @@
       </div>
     </div>
 
-    <!-- RIGHT: Contact info -->
+    <!-- RIGHT CARD: Contact info — mailing address, email, and phone.
+         The mailto: and tel: links open the visitor's email program or
+         dial the number on phones with one tap. -->
     <div class="contact-card">
       <h2>Contact</h2>
       <p class="contact-line">
@@ -183,7 +203,25 @@
 
   <hr class="policy-divider">
 
-  <!-- CONTACT FORM (now at bottom) -->
+  <!-- =============================================
+       CONTACT FORM
+       The form itself is plain HTML. The clever bit is where it's
+       sent: the action attribute points to Formspree, a service
+       that takes the form data, turns it into an email, and drops
+       it in my inbox — which means our actual email address never
+       has to sit on the page where spam bots can scrape it.
+
+       The hidden inputs are configuration for Formspree:
+         _subject  — sets the subject line of the email that arrives
+         _replyto  — tells Formspree to use whatever the visitor
+                     types in the "email" field as the Reply-To so
+                     replying goes back to them, not to Formspree.
+         _redirect — after the form submits, send the visitor back
+                     here to contact.html.
+
+       If we ever need to change where messages go, swap the form id
+       at the end of the action URL (that's the Formspree form key).
+       ============================================= -->
   <section class="contact-card contact-form-wrap">
     <h2>Send a Message</h2>
     <p class="contact-small">
@@ -220,7 +258,8 @@
 </main>
   
 
-  <!-- FOOTER: Same footer from index.html -->
+  <!-- SITE FOOTER — same two-column footer used on every main page.
+       See index.html for the full description. -->
   <footer class="site-footer">
     <div class="footer-content">
       <div class="footer-left">
@@ -271,7 +310,7 @@
       <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
     </div>
   </footer>
-
+  <!-- Site-wide script — clock, weather, and the other interactive pieces. -->
   <script src="js/scripts.js"></script>
 </body>
 </html>

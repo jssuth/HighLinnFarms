@@ -1,3 +1,29 @@
+/* =============================================
+   ARCHIVES.CSS — Standalone styling for the newspaper-clipping
+                  HTML files in /archives/<id>/
+   =============================================
+   These archive pages are tiny one-off HTML documents — one per
+   ancestor — that show old newspaper articles transcribed into
+   readable text. They're opened in a separate window from the
+   ancestor card on about.html (the "📜 Read transcription" link).
+
+   Because they open in their own window, they DON'T load
+   styles.css — they are completely self-contained and use
+   archives.css only. That's why this file sets body styles,
+   font, etc. from scratch.
+
+   The look is meant to feel like a clipping pasted into a
+   scrapbook: warm cream paper color, serif font, a soft drop
+   shadow under the "card", and indented paragraphs.
+   ============================================= */
+
+
+/* =============================================
+   PAGE BACKGROUND + BASE TYPOGRAPHY
+   Cream-colored background and a serif font set the
+   newspaper / scrapbook tone. line-height 1.65 keeps long
+   transcribed paragraphs easy on the eyes.
+   ============================================= */
 body {
   margin: 0;
   padding: 24px;
@@ -6,7 +32,12 @@ body {
   font-family: Georgia, "Times New Roman", serif;
   line-height: 1.65;
 }
-
+/* =============================================
+   THE CLIPPING "CARD"
+   Wraps the whole article. Capped width, centered, with a
+   gentle border + drop shadow so it looks like a piece of
+   paper laid on the cream background.
+   ============================================= */
 .clipping {
   max-width: 760px;
   margin: 0 auto;
@@ -16,13 +47,19 @@ body {
   box-shadow: 0 8px 22px rgba(0,0,0,0.08);
   overflow: hidden;
 }
-
+/* =============================================
+   HEADER STRIP at the top of the clipping —
+   holds the kicker, title, and meta line. The subtle
+   top-to-bottom gradient gives it the feel of a folded
+   paper edge.
+   ============================================= */
 .clipping-header {
   padding: 20px 22px 14px;
   border-bottom: 1px solid #ddd2bd;
   background: linear-gradient(to bottom,#fdfbf5,#f6f0e2);
 }
-
+/* The little ALL-CAPS line above the title — paper name,
+   section, that kind of thing. */
 .clipping-kicker {
   font-size: .85rem;
   text-transform: uppercase;
@@ -30,20 +67,24 @@ body {
   color: #6d6252;
   margin-bottom: 6px;
 }
-
+/* The big article headline. */
 .clipping-title {
   font-size: 1.7rem;
   font-weight: 700;
   margin: 0;
   color: #2e2a25;
 }
-
+/* Meta line under the title — date / byline / etc. */
 .clipping-meta {
   margin-top: 8px;
   font-size: .95rem;
   color: #5f574b;
 }
-
+/* =============================================
+   ARTICLE BODY
+   Typical newspaper paragraph styling: indented first lines
+   (except the first paragraph) and a comfortable font size.
+   ============================================= */
 .clipping-body {
   padding: 22px;
   font-size: 1.05rem;
@@ -53,11 +94,15 @@ body {
   margin: 0 0 16px;
   text-indent: 1.5em;
 }
-
+/* The very first paragraph doesn't get an indent — looks
+   weird right after the header. */
 .clipping-body p:first-child {
   text-indent: 0;
 }
-
+/* =============================================
+   FOOTER STRIP at the bottom of the clipping —
+   used for source citation, "transcribed from" notes, etc.
+   ============================================= */
 .clipping-footer {
   padding: 16px 22px 22px;
   border-top: 1px solid #ddd2bd;
@@ -69,6 +114,11 @@ body {
 .clipping-footer strong {
   color: #463f36;
 }
+/* =============================================
+   PHONE-SIZE TWEAKS
+   Pull the page padding in a bit and shrink the headline so
+   it doesn't dominate small screens.
+   ============================================= */
 
 @media (max-width:600px){
 

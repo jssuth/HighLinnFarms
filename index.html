@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- =============================================
+     HOME PAGE — index.html
+     This is the landing page and the "reference" page for the site.
+     The shared pieces that repeat on every page — the top bar with the
+     date/time and weather, the header/nav, and the footer — are explained
+     in detail right here. On the other pages those same blocks appear
+     with only a short comment pointing back to this page, so one change
+     to the wording or style here matches what the others need.
+     ============================================= -->
 <head>
+  <!-- Browser basics — character set and favicon in multiple sizes
+         so it looks right in tabs, bookmarks, and home-screen shortcuts. -->
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
     <meta name="author" content="John Sutherland">
+    <!-- Viewport — tells phones to render at device width instead of
+         shrinking the whole page like a desktop site. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title shown in the browser tab and in Google search results. -->
     <title>High Linn Farms | Hunting Land &amp; Farm Stay in Southeast Kansas</title>
+    <!-- Short description Google pulls under the title in search results. -->
     <meta name="description" content="High Linn Farms is a historic family farm near Prescott, Kansas — 150 years of roots, two properties to explore, and genuine rural land open to the right guests.">
     <!-- Open Graph — controls how this page looks when shared on social media -->
     <meta property="og:type" content="website">
@@ -16,10 +31,35 @@
     <meta property="og:title" content="High Linn Farms | Hunting Land &amp; Farm Stay in Southeast Kansas">
     <meta property="og:description" content="Historic family farm near Prescott, Kansas. Timbered hunting retreat near Pleasanton and a working 110-acre farmstead — genuine Kansas land with 150 years of history.">
     <meta property="og:image" content="https://highlinnfarms.com/images/mission.jpg">
+    <!-- Site-wide stylesheet — every page pulls its look from styles.css. -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body id="top">
+<!-- =============================================
+     TOP BAR — Date, Clock & Weather
+     Thin strip that runs across the very top of every page.
+     Two halves: date/time on the left, a clickable weather
+     readout on the right.
 
+     What fills in when the page loads:
+       - #date and #clock get set by scripts.js on page load and update as time passes.
+       - The weather text next to the cloud icon gets replaced with
+         the live conditions for Prescott, KS (or whatever city the
+         visitor types into the box below).
+       - Clicking the weather strip opens the #weather-panel drop-down
+         with full current conditions plus a 5-day forecast. The panel
+         starts life with the "hidden" class and scripts.js toggles it
+         open/closed.
+       - The city input + "Update" button lets a visitor switch the
+         readout to their own town by name, state, or ZIP.
+
+     All of the dashes and placeholder values (——, --°F) are stand-ins
+     that get replaced the moment the weather data comes back.
+
+     This exact block is repeated on index / about / properties /
+     farm-talk / contact / stay — so changes made here need to be
+     copied into those other pages too.
+     ============================================= -->
 <div class="top-bar">
   <div class="top-bar-info">
 
@@ -29,7 +69,8 @@
       <span id="clock">4:53 PM</span>
     </div>
 
-    <!-- RIGHT SIDE: WEATHER -->
+    <!-- RIGHT SIDE: WEATHER — the cloud icon, short readout, and caret
+         arrow together are the "click to open" trigger. -->
     <div class="top-right-info">
       <div class="weather-container">
         <span id="weather-link" class="weather-link">
@@ -37,6 +78,9 @@
           <span class="weather-text">Clouds, 19°F</span>
           <span class="weather-caret">▾</span>
         </span>
+        <!-- Drop-down panel — hidden until the weather strip is clicked.
+             Shows location, last-updated time, wind, humidity, feels-like,
+             a city switcher, and 5 forecast days. -->
 
         <div id="weather-panel" class="weather-panel hidden">
           <div id="weather-location" class="weather-detail">📍 Prescott, KS</div>
@@ -44,7 +88,7 @@
           <div id="wind" class="weather-detail">💨 Wind: ——</div>
           <div id="humidity" class="weather-detail">💧 Humidity: ——</div>
           <div id="feels-like" class="weather-detail">👆 Feels Like: ——°F</div>
-
+          <!-- City switcher — lets the visitor type their own location -->
           <div class="weather-city-select">
             <input
               type="text"
@@ -57,7 +101,9 @@
 
             <button id="weather-city-submit" class="weather-button">Update</button>
           </div>
-
+          <!-- 5-day forecast strip — day label, icon, and high temp.
+               The icons and temps are placeholders until scripts.js
+               fills them in from the forecast data. -->
           <div id="multi-forecast" class="multi-forecast">
             <div class="forecast-day">
                 <span class="day-label">Tomorrow</span>
@@ -94,20 +140,36 @@
 </div>
 
 
+<!-- =============================================
+     SITE HEADER / NAV
+     Top of the page under the thin top bar — big logo and farm
+     name on the left, main site navigation underneath.
 
+     Reference instance: every other page has the same header with
+     only a short "same as Home" comment. The current page marks
+     its own nav link with class="active" so the visitor can always
+     see where they are in the site. On this page, "Home" is active;
+     on about.html, "About" is active, and so on.
+
+     The commented-out "Gallery" link is intentional — that page
+     isn't built yet, so the link is parked until it is.
+     ============================================= -->
 <header class="site-header">
+  <!-- Logo bar — horizontal farm logo next to the site title.
+       The H1 on this page is the site title itself so Google knows
+       this is the main landing page. The inside pages use a <p>
+       styled like a title instead, leaving the H1 for the page name. -->
 
   <div class="logo-bar">
     <img src="images/logo-horizontal.png" alt="High Linn Farms logo" class="header-logo" />
     <h1 class="site-title">High Linn Farms</h1>
   </div>
-
+  <!-- Main navigation — the active class marks the current page. -->
   <nav class="nav-menu">
     <ul>
       <li><a class="active" href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="properties.html">Properties</a></li>
-      <!--<li><a href="gallery.html">Gallery</a></li> -->
       <li><a href="farm-talk.html">Farm Talk</a></li>
       <li><a href="contact.html">Contact & Directions</a></li>
       <li><a href="stay.html">Stay With Us</a></li>
@@ -181,7 +243,21 @@
 </main>
 
 
+<!-- =============================================
+     SITE FOOTER
+     Two-column layout: logo + name on the left, mailing address /
+     email / phone on the right. Underneath sits the divider, the
+     legal links (Privacy + Terms), the "↑ Top" jump button, and
+     the copyright line.
 
+     Reference instance: same footer is repeated on the other main
+     pages (about, properties, farm-talk, contact, stay). Privacy
+     and Terms use a smaller, simpler footer of their own.
+
+     The "↑ Top" link works because <body> up at the top has id="top".
+     Update mailing address, email, or phone in one place per page —
+     also remember the footer block in each of the other pages.
+     ============================================= -->
 
 <footer class="site-footer">
   <div class="footer-content">
@@ -220,6 +296,8 @@
   </div> <!-- ✅ closes .footer-content -->
 
    <hr class="footer-divider">
+    <!-- Bottom strip — legal links on the left, "Top" on the right,
+         copyright across the bottom. -->
 
     <div class="footer-bottom">
 
@@ -238,7 +316,9 @@
 
   
 </footer>
-
+   <!-- Site-wide script — handles the clock/date, the live weather panel,
+        the photo viewers, and the other interactive pieces. Loaded last so
+        it runs after all the page elements it touches are on the page. -->
    <script src="js/scripts.js"></script>
  
 </body>

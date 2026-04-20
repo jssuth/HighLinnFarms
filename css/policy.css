@@ -1,13 +1,38 @@
-/* ==========================
-   Policy + Terms ONLY
-   ========================== */
+/* =============================================
+   POLICY.CSS — Privacy Policy + Terms of Use pages only
+   =============================================
+   These two pages (privacy.html and terms.html) use a simpler
+   layout than the rest of the site — no top bar, no logo bar, no
+   weather, no scripts. This stylesheet sits on TOP of styles.css
+   and only adds/overrides the pieces those legal pages need:
+
+     - .simple-header          — slim green nav strip at the top
+     - .policy-header          — the green title band
+     - .policy-page / .policy-content — the text wrapper
+     - .to-top-fab             — the floating "↑ Top" pill button
+     - A few footer tweaks     — to re-align the footer once the
+                                 big two-column content is gone
+
+   var(--hlf-field-green) is defined in styles.css :root — I'm just
+   reusing the site-wide green variable here so the two files stay
+   in sync. See the :root block at the top of styles.css.
+   ============================================= */
+
+
+/* =============================================
+   SLIM HEADER (nav-only bar at the top)
+   The main pages use .site-header with a logo bar and taller
+   nav. These pages only need a thin strip of nav links, so
+   .simple-header is its own thing.
+   ============================================= */
 
 /* Header nav for policy/terms pages */
 .simple-header{
   background: var(--hlf-field-green);
   padding: 14px 18px;
 }
-
+/* The nav list itself — flex row, wraps on narrow screens,
+   centered because there's no logo pushing it to one side. */
 .simple-header .main-nav ul{
   list-style: none;
   margin: 0;
@@ -17,7 +42,8 @@
   gap: 18px;
   justify-content: center;
 }
-
+/* White nav links with a hint of transparency so hover can
+   pop them to full opacity without changing color. */
 .simple-header .main-nav a{
   color: #fff;
   text-decoration: none;
@@ -30,7 +56,11 @@
   opacity: 1;
 }
 
-/* Green title band */
+/* =============================================
+   GREEN TITLE BAND
+   Shown just under the nav — the page name ("Privacy Policy"
+   or "Terms of Use") sits here in large white text.
+   ============================================= */
 .policy-header{
   background: var(--hlf-field-green);
   color: #fff;
@@ -38,24 +68,34 @@
   padding: 50px 16px;
 }
 
-/* Content wrapper */
+/* =============================================
+   CONTENT WRAPPER
+   .policy-page is applied to <body> on these pages. We cap the
+   width so long paragraphs stay readable and center the column
+   with auto margins.
+   ============================================= */
 .policy-page{
   max-width: 900px;
   margin: 0 auto;
   padding: 40px 24px 60px;
 }
 
-/* Optional: nicer spacing for sections */
+/* A little breathing room before each numbered section heading. */
 .policy-content h2{
   margin-top: 28px;
 }
 
-/* =========================================================
-   Floating "Top" Button (Brand Green + Readable Everywhere)
-   Swap-out block (includes hover + mobile adjustments)
-   ========================================================= */
+/* =============================================
+   FLOATING "↑ TOP" BUTTON
+   A pill-shaped link pinned to the bottom-right corner of the
+   page. Clicking it jumps back to body id="top". Shared between
+   both legal pages.
 
-/* Floating Top Button — matches site green */
+   The white border + green fill mimics the buttons elsewhere on
+   the site. position: fixed keeps it anchored to the viewport
+   even while the page scrolls. z-index: 9999 makes sure it floats
+   above everything else (including the footer).
+   ============================================= */
 
 .to-top-fab{
   position: fixed;
@@ -83,7 +123,8 @@
   color: #ffffff !important;
 }
 
-/* Mobile adjustment */
+/* On phones, tuck the button in a little tighter and shrink it
+   so it doesn't cover the text underneath. */
 @media (max-width: 768px){
   .to-top-fab{
     right: 12px;
@@ -95,7 +136,13 @@
 
 
 
-/* ===== Policy/Terms footer alignment fix ===== */
+/* =============================================
+   FOOTER TWEAKS FOR THE LEGAL PAGES
+   The main site footer is a two-column block with logo on the
+   left and contact info on the right. On these pages we strip
+   all that out and only show the legal links + copyright, so
+   we re-center everything and tidy up spacing.
+   ============================================= */
 .site-footer .footer-bottom{
   text-align: center;
   padding: 18px 18px 22px;
@@ -120,12 +167,19 @@
   opacity: 1;
   text-decoration: none; /* keeps it classy */
 }
-
+/* Zero out the default paragraph margin so the copyright
+   line hugs the links above it without the "mystery space"
+   browsers add by default. */
 .site-footer .footer-bottom p{
   margin: 0;             /* removes the default “mystery spacing” */
   line-height: 1.4;
 }
-
+/* =============================================
+   LINKS INSIDE POLICY TEXT
+   The body text on these pages has the occasional mailto: or
+   contact link. Style them in the dark site green and only
+   show the underline on hover so the paragraph reads cleanly.
+   ============================================= */
 .policy-contact-link {
   font-weight: 600;
   text-decoration: none;
@@ -144,6 +198,6 @@
 
 .policy-page a:hover {
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-underline-offset: 2px;     /* little gap below the baseline */
 }
 

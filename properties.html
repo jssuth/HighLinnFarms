@@ -1,5 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- =============================================
+     PROPERTIES PAGE — properties.html
+     Two big property sections on one page:
+       1. PRESCOTT — 110-acre working farmstead with a photo gallery
+          that opens into a full-screen lightbox viewer.
+       2. PLEASANTON — timbered retreat with a seasonal tab viewer
+          that swaps photo sets for Winter / Spring / Summer / Fall.
+
+     The gallery lightbox and the seasonal tabs are two of the more
+     interactive pieces on the site. Each is explained once where it
+     first appears — see the big banners inside the Prescott and
+     Pleasanton sections below.
+     ============================================= -->
 <head>
   <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -20,7 +33,8 @@
 </head>
 
 <body id="top" class="page-properties">
-
+  <!-- TOP BAR — date / clock / weather. Same block on every main page;
+       see index.html for the full walk-through. -->
   <div class="top-bar">
   <div class="top-bar-info">
 
@@ -94,7 +108,8 @@
   </div>
 </div>
 
-  <!-- HEADER / NAV: Same header/nav from index.html for consistency -->
+  <!-- HEADER / NAV — same logo + nav as every page; "Properties" is
+       marked active here. See index.html for the full description. -->
   <header class="site-header">
 
   <div class="logo-bar">
@@ -117,19 +132,26 @@
 
 </header>
 
-  <!-- PAGE HERO BAND  -->
+    <!-- PAGE BANNER — narrow band under the nav with the page title. -->
   <section class="page-banner">
     <h1>Properties</h1>
   </section>
 
 
   <main class="policy-page">
-
-    <!-- =============================================
+   <!-- =============================================
          PRESCOTT PROPERTY
+         The 110-acre working farm near Prescott. Layout is:
+           1. Property intro — write-up on the left, aerial photo right.
+           2. Photo gallery in four labeled sections (House, Lightning
+              Strike & Rebuild, Grounds & Outbuildings, Land & Ponds).
+           3. Hidden lightbox overlay that opens when any photo is
+              clicked — see the gallery banner below for how it works.
          ============================================= -->
+   
     <section class="property-section" id="prescott">
-
+         <!-- Top intro: text on the left, aerial map on the right.
+           Stacks vertically on phones. -->
       <div class="property-intro">
 
         <div class="property-intro-text">
@@ -164,7 +186,7 @@
         </div>
       </div>
 
-      <!-- =============================================
+     <!-- =============================================
            PRESCOTT PHOTO GALLERY
            Photos are organized into 4 sections below.
            To add a new photo to any section:
@@ -172,6 +194,27 @@
              2. Copy one of the <figure class="gallery-item"> blocks
              3. Update the src filename and the figcaption text
            Clicking any photo opens the full-size lightbox viewer automatically.
+
+           HOW THE LIGHTBOX WORKS
+           ----------------------
+           The lightbox is the black full-screen overlay that pops up
+           when a gallery photo is clicked. The markup for it sits at
+           the bottom of this section (#prescott-lightbox) and starts
+           out hidden.
+
+           The flow:
+             - Clicking any figure inside .prescott-gallery is caught
+               by the script.
+             - The script reads that figure's <img> src and figcaption
+               and drops them into #lightbox-img and #lightbox-caption.
+             - It also counts where this photo sits in the gallery and
+               updates #lightbox-counter (e.g. "3 / 18").
+             - The ← and → arrow buttons and the ✕ close button cycle
+               through photos or close the overlay.
+
+           Because the lightbox is driven entirely off the gallery markup,
+           adding a new photo (step 3 above) automatically works with
+           the lightbox — no extra wiring required.
            ============================================= -->
       <div class="prescott-gallery" id="prescott-gallery">
 
@@ -293,7 +336,11 @@
 
       </div><!-- end .prescott-gallery -->
 
-      <!-- Lightbox overlay -->
+      <!-- Lightbox overlay — starts out hidden.
+           The image src, caption, and counter are all blank by default
+           because they're filled in by the script when a gallery photo
+           is clicked. role="dialog" and aria-modal="true" mark this as
+           an overlay for screen readers so it announces itself properly. -->
       <div id="prescott-lightbox" class="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
         <button class="lightbox-close" aria-label="Close photo viewer">&times;</button>
         <button class="lightbox-prev" aria-label="Previous photo">&#8249;</button>
@@ -309,6 +356,10 @@
 
     <!-- =============================================
          PLEASANTON PROPERTY
+         The timbered retreat near Pleasanton. Layout is:
+           1. Property intro — write-up on the left, aerial photo right.
+           2. Seasonal tab viewer — see the banner on it below for how
+              it swaps photo sets by season.
          ============================================= -->
     <section class="property-section" id="pleasanton">
 
@@ -339,18 +390,37 @@
           />
         </div>
       </div>
+         <!-- =============================================
+           SEASONAL TAB VIEWER
+           Four tabs along the top (Winter, Spring, Summer, Fall) and
+           four empty panels underneath. Clicking a tab shows only the
+           matching panel and hides the others — Winter is the default.
 
-      <!-- Seasonal Tab Viewer -->
+           Both the tabs and the panels use matching data-season values
+           ("winter", "spring", etc.) so the script can pair each tab
+           to its panel.
+
+           The panels are empty in the HTML. The script fills each one
+           at page load by reading the list of photos for that season
+           from the images/properties/pleasanton/<season>/ folder. To
+           add or remove seasonal photos, drop them into the right
+           season folder — the viewer picks them up automatically.
+
+           data-property="pleasanton" is here in case we ever add a
+           second seasonal viewer for another property; the script
+           uses the value to know which image folder to look in.
+           ============================================= -->
+      
       <div class="seasonal-viewer" data-property="pleasanton">
         <h3>Seasons at Pleasanton</h3>
-
+        <!-- Tabs row — the active class marks the current tab. -->
         <div class="season-tabs">
           <button class="season-tab active" data-season="winter">❄️ Winter</button>
           <button class="season-tab" data-season="spring">🌱 Spring</button>
           <button class="season-tab" data-season="summer">☀️ Summer</button>
           <button class="season-tab" data-season="fall">🍂 Fall</button>
         </div>
-
+         <!-- Panels — one per season, kept empty and populated by the script. -->
         <div class="season-panel active" data-season="winter"></div>
         <div class="season-panel" data-season="spring"></div>
         <div class="season-panel" data-season="summer"></div>
@@ -361,7 +431,8 @@
 
   </main>
 
-  <!-- FOOTER: Exact footer from index.html -->
+   <!-- SITE FOOTER — same two-column footer used on every main page.
+       See index.html for the full description. -->
   <footer class="site-footer">
     <div class="footer-content">
       <div class="footer-left">
@@ -413,7 +484,8 @@
     </div>
   </footer>
 
-  <!-- Pages that use scripts.js, keep this -->
+  <!-- Site-wide script — this page uses it for the gallery lightbox
+       and the seasonal tab viewer, in addition to the clock and weather. -->
   <script src="js/scripts.js"></script>
 </body>
 </html>

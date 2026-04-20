@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- =============================================
+     ABOUT PAGE — about.html
+     Three-generation family history: Walter J. Sutherland (the Civil
+     War veteran who settled near Prescott around 1869), Walter Mason
+     Sutherland (his son, turn-of-the-century Prescott), and Carl &
+     Mary Jane Sutherland (my parents, who established the current
+     farm). Each generation gets its own card with a portrait and an
+     expandable photo/document viewer underneath.
+
+     The page-about class on <body> lets styles.css apply any
+     About-specific styling without affecting the other pages.
+     ============================================= -->
 <head>
   <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -20,7 +32,9 @@
 </head>
 
 <body id="top" class="page-about">
-  <!-- TOP BAR (same as Contact) -->
+  <!-- TOP BAR — date / clock / weather. Same block on every main page;
+       see index.html for the full walk-through of how the weather panel,
+       city switcher, and 5-day forecast all fit together. -->
   <div class="top-bar">
     <div class="top-bar-info">
 
@@ -93,7 +107,9 @@
     </div>
   </div>
 
-  <!-- HEADER / NAV (same structure as Contact) -->
+  <!-- HEADER / NAV — same logo + nav as every page; "About" is marked
+       active here so the visitor can see where they are in the site.
+       See index.html for the full description of this header. -->
   <header class="site-header">
     <div class="logo-bar">
       <img src="images/logo-horizontal.png" alt="High Linn Farms logo" class="header-logo" />
@@ -112,12 +128,14 @@
     </nav>
   </header>
 
-  <!-- PAGE BANNER -->
+  <!-- PAGE BANNER — the narrow band under the nav with the page title. -->
   <section class="page-banner">
     <h1>About High Linn Farms</h1>
   </section>
 
-  <!-- MAIN CONTENT (replaces Contact/Directions/Map/Formspree) -->
+   <!-- MAIN CONTENT — three ancestor cards stacked one under the other.
+       The policy-page class gives us the comfortable reading width
+       that the Privacy and Terms pages also use. -->
   <main class="policy-page">
 
    <!-- =============================================
@@ -125,11 +143,39 @@
         Civil War veteran, settled near Prescott, KS around 1866–1869.
         Great-grandfather. First generation in Kansas.
         Has a photo/document viewer (viewer-walter-j) with archive images.
+
+        THE ANCESTOR CARD PATTERN (used three times on this page)
+        ---------------------------------------------------------
+        Each of the three generations uses the exact same structure:
+          <section class="ancestor card" id="..."> — the big card
+            h2.section-kicker — small "chapter" subheading above the name
+            h3.ancestor-title — the ancestor's title/tagline
+            .ancestor-layout — side-by-side text + portrait
+              .ancestor-text — the biography paragraphs
+                button.viewer-toggle — opens the photo/document viewer.
+                  data-viewer="viewer-xxx" tells the script which
+                  viewer panel underneath belongs to this card.
+              figure.ancestor-portrait — portrait photo + caption
+            .media-viewer — the hidden photo/document slideshow.
+              Starts with the HTML "hidden" attribute so it's collapsed.
+              Contains a toolbar (Close / Prev / Next / counter),
+              a big stage where the current photo shows, and a thumbnail
+              strip. The actual photos are read from the archives/<folder>/
+              directory on the server by the script — the script looks up
+              the viewer's id, matches it to the archive folder, and
+              populates the stage and thumbs automatically. That's why
+              the stage and thumbs here are empty.
+
+        To add a fourth ancestor card down the road, copy one of these
+        sections, rename the id and the data-viewer to something unique,
+        and drop the new archive photos into archives/<new-id>/.
         ============================================= -->
 <section class="ancestor card" id="walter-j">
 
   <h2 class="section-kicker">Our Story Begins Here</h2>
   <h3 class="ancestor-title">Go West Young Soldier — To Kansas</h3>
+    <!-- Side-by-side: biography text on the left, portrait on the right.
+       Stacks vertically on phones thanks to the styles in styles.css. -->
 
   <div class="ancestor-layout">
 
@@ -161,12 +207,17 @@
         and their farm in East Sheridan Township. Adaline passed May 30, 1889, and
         Walter passed on February 21, 1923.
       </p>
-
+      <!-- "View photos & documents" — opens the viewer below.
+           data-viewer must match the id on the .media-viewer further down. -->
+           
       <button class="viewer-toggle" type="button" data-viewer="viewer-walter-j">
         View photos &amp; documents →
       </button>
     </div>
 
+    <!-- Portrait — photo lives in archives/walter-j/portrait.jpg.
+         loading="lazy" tells the browser not to download it until
+         the visitor scrolls near it, which keeps the page fast. -->
     <figure class="ancestor-portrait">
       <img
         src="archives/walter-j/portrait.jpg"
@@ -177,6 +228,11 @@
     </figure>
 
   </div>
+
+  <!-- Photo / document viewer for Walter J. — starts collapsed.
+       The toolbar (Close / Prev-Next / counter) is the only fixed
+       markup; the stage and thumbs are filled in by the script
+       from the archives/walter-j/ folder. -->
 
   <div class="media-viewer" id="viewer-walter-j" hidden>
     <div class="viewer-toolbar">
@@ -199,7 +255,11 @@
         SECTION 2 — WALTER MASON SUTHERLAND (WM / Mason)
         Son of Walter J. Born 1873 on the East Sheridan homestead.
         Second generation. Turn-of-the-century Prescott.
+        Same ancestor-card pattern as Section 1 — see Section 1 for
+        how the layout, viewer-toggle button, and media-viewer panel
+        all hook together.
         ============================================= -->
+      
 <section class="ancestor card" id="walter-mason">
   <h2 class="section-kicker">The Story Continues</h2>
   <h3 class="ancestor-title">In the West at the Turn of the Century — Prescott, Kansas</h3>
@@ -265,7 +325,9 @@
      SECTION 3 — CARL & MARY JANE SUTHERLAND
      John's parents. Established the current farm — in family over 75 years.
      This is where the modern High Linn Farms story takes root.
+     Same ancestor-card pattern as Sections 1 and 2.
      ============================================= -->
+
 <section class="ancestor card" id="carl-mason">
   <h2 class="section-kicker">The 20th Century Marches On</h2>
   <h3 class="ancestor-title">Carl & Mary Jane — Where the Sutherland Story Finds Its Home</h3>
@@ -349,7 +411,8 @@
 
   </main>
 
- 
+ <!-- SITE FOOTER — same two-column footer used on every main page.
+     See index.html for the full description of how it's built. -->
 <footer class="site-footer">
   <div class="footer-content">
     <div class="footer-left">
@@ -405,7 +468,7 @@
 
   
 </footer>
-
+   <!-- Site-wide script — clock, weather, photo viewers, and more. -->
    <script src="js/scripts.js"></script>
  
 </body>

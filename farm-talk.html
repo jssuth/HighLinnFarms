@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+ <!-- =============================================
+     FARM TALK PAGE — farm-talk.html
+     Articles from the field — pond management, hay ground & CRP,
+     gardening, wildlife, and everyday farm life. The page holds a
+     row of category "pills" (All / Ponds / Crops / Garden / Wildlife
+     / Farm Life) that filter the grid to just the chosen topic, and
+     a grid of article cards. Each card has a short teaser up top
+     and a "Read Article" button that expands it into the full
+     article below without leaving the page.
+
+     To add a new article, copy one of the five <article> blocks,
+     set its data-category to match one of the pill values, and
+     fill in the title / summary / content.
+     ============================================= --> 
 <head>
   <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -19,7 +33,8 @@
 </head>
 
 <body id="top" class="page-farm-talk">
-
+  <!-- TOP BAR — date / clock / weather. Same block on every main page;
+       see index.html for the full walk-through. -->
   <div class="top-bar">
     <div class="top-bar-info">
 
@@ -92,7 +107,8 @@
     </div>
   </div>
 
-  <!-- HEADER / NAV -->
+    <!-- HEADER / NAV — same logo + nav as every page; "Farm Talk" is
+       marked active here. See index.html for the full description. -->
   <header class="site-header">
 
     <div class="logo-bar">
@@ -105,7 +121,6 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="properties.html">Properties</a></li>
-        <!-- <li><a href="gallery.html">Gallery</a></li> -->
         <li><a class="active" href="farm-talk.html">Farm Talk</a></li>
         <li><a href="contact.html">Contact & Directions</a></li>
         <li><a href="stay.html">Stay With Us</a></li>
@@ -114,7 +129,7 @@
 
   </header>
 
-  <!-- PAGE BANNER -->
+    <!-- PAGE BANNER — narrow band under the nav with the page title. -->
   <section class="page-banner">
     <h1>Farm Talk</h1>
   </section>
@@ -128,7 +143,18 @@
       an article below.
     </p>
 
-    <!-- Category filter pills -->
+       <!-- =============================================
+         CATEGORY FILTER PILLS
+         The row of buttons below lets the visitor narrow the article
+         grid down to a single topic. Each pill has a data-category
+         value that matches the data-category on the articles below.
+         Clicking a pill tells the script to hide any article whose
+         data-category doesn't match. "All Topics" reveals them all.
+
+         To add a new category, add a pill here with a new
+         data-category value, and use that same value on any article
+         you want to fall under it.
+         ============================================= -->
     <div class="category-bar">
       <button class="category-pill active" data-category="all">All Topics</button>
       <button class="category-pill" data-category="ponds">Ponds &amp; Water</button>
@@ -138,19 +164,61 @@
       <button class="category-pill" data-category="farm-life">Farm Life</button>
     </div>
 
-    <!-- Article Grid -->
+      <!-- =============================================
+         ARTICLE GRID — five article cards stacked below.
+         Each card has the same structure — the first article
+         (Algae in Farm Ponds) carries the "reference" comments that
+         explain each piece. Later articles repeat the same pattern
+         with only a short section banner.
+         ============================================= -->
     <div class="article-grid">
-
       <!-- ========================================
            ARTICLE 1 — Algae in Kansas Farm Ponds
-           ======================================== -->
-      <article class="article-card" data-category="ponds">
 
+           THE ARTICLE CARD PATTERN (used five times on this page)
+           -------------------------------------------------------
+           Every article on this page follows the same skeleton:
+
+             <article class="article-card" data-category="...">
+               <img class="article-card-photo"> — the headline photo
+                                                  across the top of the card
+               <div class="article-card-inner">
+                 .article-meta — small category tag + date line
+                 h2.article-title — the article headline
+                 p.article-summary — the short teaser paragraph
+                 .article-actions — Read Article + Print buttons
+                 .article-pdf-block — (optional) PDF download link
+               </div>
+               <div class="article-full">
+                 ...the full article body...
+               </div>
+             </article>
+
+           data-category matches one of the values on the filter pills
+           above, so the filter can show/hide this card.
+
+           .article-full starts out collapsed. Clicking "Read Article"
+           in .article-actions expands it open; clicking again folds
+           it back up.
+
+           A handful of reusable mini-patterns show up inside the
+           full-article sections:
+             - .before-after        — side-by-side figure pair (see below)
+             - .article-inline-photo — a single full-width photo/caption
+             - .article-resources   — the boxed K-State / resource links
+             - .article-pdf-block   — the download-this-paper block
+             - .article-notice      — highlighted callout box
+           Each one is explained the first time it appears.
+           ======================================== -->
+     
+      <article class="article-card" data-category="ponds">
+         <!-- Headline photo across the top of the card. -->
         <img class="article-card-photo"
              src="farm-talk/images/pond-after.jpg"
              alt="Prescott farm pond with hay bales and blue sky reflected in water">
 
         <div class="article-card-inner">
+          <!-- Small grey tag line: category pill color + publish date. -->
           <div class="article-meta">
             <span class="article-category">Ponds &amp; Water</span>
             <span class="article-date">Spring 2026</span>
@@ -163,11 +231,17 @@
             Kansas farms. Learn what's really driving that green water, which types are harmless
             and which are dangerous, and what you can do about it without breaking the bank.
           </p>
-
+           <!-- Action buttons — "Read Article" expands the full article
+               below; "Print" uses the browser's built-in print dialog. -->
           <div class="article-actions">
             <button class="btn-read-article">Read Article</button>
             <button class="btn-print-article" onclick="window.print()">🖨 Print</button>
           </div>
+          <!-- PDF DOWNLOAD BLOCK (reusable pattern)
+               When an article has an accompanying PDF paper, drop this
+               block in. The link opens the PDF in a new tab; the italic
+               description next to it tells the visitor what the paper is.
+               Swap the href to point to a different PDF for other articles. -->
           <div class="article-pdf-block">
             <a class="btn-download-pdf" href="farm-talk/algae-kansas-farm-ponds.pdf" target="_blank" rel="noopener">
               📄 Download Paper
@@ -179,10 +253,14 @@
           </div>
         </div>
 
-        <!-- Expandable full article -->
+        <!-- Expandable full article — hidden until "Read Article" is clicked. -->
         <div class="article-full">
 
-          <!-- Before / After photos -->
+          <!-- BEFORE / AFTER PHOTOS (reusable pattern)
+               Two <figure>s inside a .before-after div display side by
+               side on desktop and stack vertically on phones. Each
+               figure is just an <img> + <figcaption>. Drop in another
+               pair for any article that benefits from a comparison. -->
           <div class="before-after">
             <figure>
               <img src="farm-talk/images/pond-before.jpg" alt="Prescott farm pond before dredging — High Linn Farms">
@@ -257,7 +335,12 @@
             </p>
           </div>
 
-          <!-- Resource links -->
+          <!-- RESOURCE LINKS BOX (reusable pattern)
+               Tinted box at the bottom of an article holding outside
+               links — usually K-State Extension publications. Same
+               structure on every article: an h4 heading, then a <ul>
+               of <li><a> entries. target="_blank" + rel="noopener"
+               opens each link in a new tab safely. -->
           <div class="article-resources">
             <h4>📚 K-State Extension Resources</h4>
             <ul>
@@ -406,7 +489,12 @@
             then today after years of clearing work. The result is clean, open ground from
             fence to treeline, with timber left standing only around the ponds where it belongs.
           </p>
-
+             <!-- INLINE PHOTO FIGURE (reusable pattern)
+               A single full-width photo with caption, used wherever a
+               photo belongs inside an article body. Always the same
+               two-line figure: <img> + <figcaption>. loading="lazy"
+               lets the browser wait to download the image until the
+               visitor scrolls near it. -->
           <figure class="article-inline-photo">
             <img src="farm-talk/images/crops-crp-before.jpg"
                  alt="CRP native grass field with brush encroachment, Prescott property — before clearing"
@@ -838,12 +926,14 @@
 
     </div><!-- /.article-grid -->
 
-    <!-- Seasonal note -->
+    <!-- Seasonal note under the article grid — sets the cadence
+         expectation for return visitors. -->
     <p class="farm-talk-seasonal-note">
       New articles added seasonally — check back often as we share more from the field.
     </p>
 
-    <!-- Have a Question? -->
+    <!-- "Have a Question?" prompt — routes curious readers over to
+         the Contact page so they can send in topic suggestions. -->
     <div class="farm-talk-question">
       <h3>Have a Question?</h3>
       <p>
@@ -855,7 +945,8 @@
 
   </main>
 
-  <!-- FOOTER -->
+  <!-- SITE FOOTER — same two-column footer used on every main page.
+       See index.html for the full description. -->
   <footer class="site-footer">
     <div class="footer-content">
       <div class="footer-left">
@@ -906,7 +997,8 @@
       <p>&copy; 2026 High Linn Farms. All rights reserved.</p>
     </div>
   </footer>
-
+<!-- Site-wide script — handles the category filter pills, article
+       expand/collapse, and the rest of the interactive pieces. -->
   <script src="js/scripts.js"></script>
 </body>
 </html>

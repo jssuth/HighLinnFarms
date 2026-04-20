@@ -1,3 +1,39 @@
+/* =============================================
+   SCRIPTS.JS — site-wide JavaScript for highlinnfarms.com
+   =============================================
+   Every main page (not the two legal pages) loads this single
+   file at the bottom of the <body>. It's organized top to
+   bottom roughly in the order the features appear on the page:
+
+     1.  Date           (top bar, left side)
+     2.  Clock          (top bar, left side)
+     3.  Weather panel  (top bar, right side) — by far the
+                        biggest chunk of this file
+     4.  About-page inline viewer (ancestor archive photos)
+     5.  About-page archive-viewer wiring
+     6.  Properties-page lightbox (full-screen photo viewer)
+     7.  Properties-page seasonal tab viewer (spring/summer/fall/winter)
+     8.  Farm Talk — category filter pills
+     9.  Farm Talk — article expand / collapse
+
+   Most features work off IDs and data-* attributes in the HTML,
+   so the script stays in its own file and doesn't need to be
+   tailored per page. When a feature's target elements aren't on
+   the current page (e.g. the seasonal viewer IDs aren't on the
+   Home page), the query selectors just return empty lists and
+   the code quietly does nothing — which is what we want.
+   ============================================= */
+
+
+/* =============================================
+   1. DATE — top bar, left side
+   =============================================
+   Reads the <span id="date">, replaces its contents with
+   "Fri, 4/17/26" style text built from the visitor's local
+   clock, then sets a 1-minute interval that only updates the
+   displayed date if the clock rolls past midnight. That way the
+   date rewrites itself once a day instead of once a second.
+   ============================================= */
 // =========================
 // Date
 // =========================
@@ -29,7 +65,14 @@ setInterval(() => {
 }, 60000); // checks once per minute
 
 
-
+/* =============================================
+   2. CLOCK — top bar, left side
+   =============================================
+   Fills <span id="clock"> with a 12-hour style clock ("4:53 PM")
+   every second. The "hours ? hours : 12" trick converts a 0-hour
+   (midnight) to 12 so we never show "0:00 AM". Padding minutes
+   keeps single digits from showing as "4:7 PM" instead of "4:07 PM".
+   ============================================= */
 // =========================
 // Clock
 // =========================
@@ -55,9 +98,52 @@ setInterval(updateClock, 1000);
 updateClock(); // run immediately
 
 
+/* =============================================
+   3. WEATHER PANEL — top bar, right side
+   =============================================
+   The big one. This block runs the weather pill in the top bar,
+   the dropdown panel with wind / humidity / feels-like / 5-day
+   forecast, and the "change city" text input at the bottom of
+   the panel. Everything is powered by the OpenWeather API.
+
+   ROUGH LAYOUT of this block:
+     - weatherIcons      — map of condition keywords to emoji
+     - getWeatherIcon()  — picks the right emoji from a
+                           condition string, with day/night
+                           variations for clear/partly cloudy
+     - isNightTime()     — true if local time is between 6pm and 6am
+     - weatherConfig     — API key + default lat/lon (Prescott)
+                           NOTE: the key is joined from 4 short
+                           chunks just to keep it from being an
+                           obvious single string in the file
+     - getCoordinatesForCity()  — geocoder lookup by city name
+     - updateWeather()   — main function; fetches current weather
+                           + 5-day forecast, updates the top bar
+                           pill and the dropdown panel fields
+     - updateMultiDayForecast() — populates the 5 .forecast-day
+                                  blocks in the dropdown
+     - Dropdown toggle   — click pill to show/hide .weather-panel
+     - City submit       — handles what happens when the visitor
+                           types a new ZIP / city+state / city
+                           and clicks "Update"
+
+   The Update button accepts three input styles:
+     1. 5-digit ZIP            (uses OpenWeather "zip" endpoint)
+     2. City + State (comma)   (uses geocoder with ",US" suffix,
+                                or country code for foreign places)
+     3. Plain city name        (loose geocoder lookup)
+
+   Each case is handled by its own branch below. All three
+   end up setting weatherConfig.lat/lon to the new coordinates
+   and calling updateWeather() to refresh.
+   ============================================= */
 // ==============================
 // Weather (Kansas-Optimized)
 // ==============================
+
+/* Lookup table: condition key → emoji. The keys are our own
+   internal names; getWeatherIcon() below maps OpenWeather's
+   condition strings onto these keys. */
 
 // Full icon map for Kansas conditions (day + night)
 const weatherIcons = {
@@ -110,6 +196,12 @@ const weatherIcons = {
     "unknown": "🌀"
 };
 
+/* Pick a single emoji for whatever condition string the API
+   returned. OpenWeather sends back free-form text like
+   "light rain" or "thunderstorm" so we do keyword matching
+   (.includes) in priority order and return the first hit.
+   At night, clear/partly-cloudy get swapped to moon-based icons
+   so a cloudless 2 AM shows 🌕 instead of ☀️. */
 
 // Smart icon selector
 function getWeatherIcon(condition, isNight = false) {
@@ -156,7 +248,10 @@ function getWeatherIcon(condition, isNight = false) {
     return weatherIcons["unknown"];
 }
 
-
+/* Rough day/night check. Anything before 6am or at/after 6pm
+   counts as "night" for the purpose of picking icons. Good
+   enough for Kansas — nobody's going to complain about a
+   moon vs a sun on the weather pill. */
 // Auto-detect day or night based on local time
 function isNightTime() {
     const now = new Date();
@@ -164,15 +259,24 @@ function isNightTime() {
     return hour < 6 || hour >= 18; // Night = 6pm–6am
 }
 
-
+/* API credentials + default location.
+   The lat/lon start at Prescott (the Kansas home). They get
+   overwritten when a visitor uses the "change city" box in
+   the dropdown. */
 // Weather configuration
 const weatherConfig = {
+  // The API key is stored split into 4 pieces and joined
+  // at runtime — not bulletproof but keeps it from being a
+  // single glaringly obvious string in the source.
  
   apiKey: ["cebf0d4f","222fb9dc","3f734913","3f7db964"].join(""),
   lat: 38.0683,      // Prescott, KS
   lon: -94.7069
 };
-
+/* Geocoder wrapper — takes a free-form city name string and
+   returns {lat, lon, name}, or null if nothing matched.
+   "async" means this function returns a Promise; callers have
+   to "await" the result. */
 async function getCoordinatesForCity(city) {
   const apiKey = weatherConfig.apiKey;
   const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${apiKey}`;
@@ -196,7 +300,16 @@ async function getCoordinatesForCity(city) {
   }
 }
 
+/* The main weather refresh. Reads the current lat/lon from
+   weatherConfig, asks OpenWeather for the current conditions,
+   updates both the top-bar pill ("Clouds, 19°F") and the
+   inside-the-dropdown fields (Wind, Humidity, Feels Like,
+   Updated time). Also kicks off updateMultiDayForecast()
+   for the 5-day strip at the bottom of the dropdown.
 
+   If the fetch fails (network down, bad key, etc.) the
+   variables stay at "Unavailable" / "--°F" so the UI just
+   shows blanks instead of crashing. */
 // Main update function
 async function updateWeather() {
   const weatherSpan = document.getElementById("weather-link");
@@ -259,7 +372,12 @@ async function updateWeather() {
   }
 }
 
-
+/* Populates the 5 .forecast-day blocks at the bottom of the
+   dropdown with tomorrow and the next four days. OpenWeather's
+   free /forecast endpoint returns 40 three-hourly entries, so
+   dayIndices picks entries roughly around noon for each day
+   (24 hours / 3 hours = 8 slots per day; index 8 = +24h,
+   index 16 = +48h, etc.). */
 async function updateMultiDayForecast(lat, lon) {
 
   const { apiKey } = weatherConfig;
@@ -300,10 +418,23 @@ async function updateMultiDayForecast(lat, lon) {
   }
 }    // end updateMultiDayForecast
 
+/* Kick off the first weather fetch on page load, then re-fetch
+   every 10 minutes (600,000 ms) so the numbers don't go stale
+   on a page that's been sitting open all day. */
+
 // Initial run + auto-refresh every 10 minutes
 updateWeather();
 setInterval(updateWeather, 600000);
 
+/* Dropdown open/close behavior.
+   Clicking the weather pill toggles the .show class on the
+   dropdown. On CLOSE we also:
+     - reset the location back to Prescott
+     - blank out the 5-day strip
+     - re-fetch the weather
+   so the panel is always "fresh" the next time it opens.
+   e.stopPropagation() keeps the click from bubbling up to
+   anything else that might be listening. */
 // WEATHER DROPDOWN TOGGLE
 const weatherLink = document.getElementById('weather-link');
 const weatherPanel = document.getElementById('weather-panel');
@@ -510,6 +641,20 @@ citySubmit.addEventListener("click", async () => {
   cityInput.value = "";
 });
 
+/* =============================================
+   4. ABOUT PAGE — Inline viewer (generic IIFE)
+   =============================================
+   This is the generic "open a media viewer with thumbnails"
+   machinery. It powers any viewer panel on the page that
+   follows the same HTML structure — the About page uses it
+   for ancestor archives (see block 5 below for the actual
+   content data).
+
+   The IIFE (that's the "(function () { ... })();" wrapper)
+   runs immediately on page load and keeps its internal
+   variables private so they don't leak into the global scope
+   and collide with anything else.
+   ============================================= */
 // ============================================================
 // ABOUT PAGE — INLINE VIEWER (IIFE)
 // This block handles the inline media viewer used on the About
@@ -610,6 +755,28 @@ citySubmit.addEventListener("click", async () => {
   });
 })();
 
+/* =============================================
+   5. ABOUT PAGE — Archive viewers (data + setup)
+   =============================================
+   Each ancestor on about.html has a "📂 View Archives" button
+   that opens a .media-viewer panel below the card. Instead of
+   hand-coding every viewer, we keep all the archive content in
+   a single data object (ARCHIVE_ITEMS) keyed by the viewer's
+   DOM id. When the button is clicked, the script looks up the
+   matching array, builds the thumbnail strip from it, and wires
+   up the prev/next/close controls.
+
+   Each item in the array has:
+     type     — "image", "pdf", or "html" (a newspaper-clipping
+                page that loads in the iframe)
+     title    — the main caption
+     label    — short text used on the thumbnail button
+     caption  — optional longer description shown under the image
+     src      — path to the file (under images/archives/<id>/...)
+
+   To add a new item to an ancestor, just add a new object to
+   that ancestor's array — no HTML changes needed.
+   ============================================= */
 // =====================================
 // ABOUT PAGE ARCHIVE VIEWERS
 // =====================================
@@ -900,7 +1067,32 @@ document.addEventListener("click", (event) => {
   }
 });
 
+/* =============================================
+   7. SEASONAL TAB VIEWER (Properties page)
+   =============================================
+   Builds the four-tab (Winter / Spring / Summer / Fall)
+   photo viewer on properties.html. All photo data lives in
+   SEASONAL_PHOTOS below, keyed by property name. The viewer
+   element in the HTML only needs a data-property attribute
+   (e.g. data-property="pleasanton") — the script looks up
+   the matching photo arrays here.
 
+   The gallery for each season is built entirely in JS: a big
+   stage image with a caption at the bottom, a prev/next row
+   with a "1 / 6" counter, and a scrolling thumbnail strip
+   below. Each season keeps its own "where I was at" photo
+   index so jumping between tabs doesn't reset progress.
+
+   Lazy rendering — a season's gallery is only built when its
+   tab is first clicked. That way the browser isn't eagerly
+   loading four galleries at once when the page opens.
+
+   Adding a new season to a property: drop new entries into
+   the matching array in SEASONAL_PHOTOS. Adding a whole new
+   property: add a new top-level key with winter/spring/summer/
+   fall arrays, then set data-property="<key>" on the viewer
+   element in the HTML.
+   ============================================= */
 // ============================================================
 // SEASONAL TAB VIEWER — Properties Page
 // ============================================================
@@ -1193,7 +1385,29 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".seasonal-viewer[data-property]").forEach(initSeasonalViewer);
 });
 
+/* =============================================
+   6. PROPERTIES PAGE — Prescott photo gallery + lightbox
+   =============================================
+   The Prescott photos use a simpler approach than the seasonal
+   tab viewer above — the photos are already in the HTML grid
+   (.gallery-item figures), and this script just turns them into
+   a clickable lightbox.
 
+   Click anywhere on a photo (or hit Enter/Space when focused)
+   and the script:
+     1. Reads the figure's <img> src/alt and <figcaption> text
+     2. Drops them into the #lightbox-img / #lightbox-caption /
+        #lightbox-counter elements
+     3. Shows the lightbox by setting hidden=false
+     4. Locks page scrolling (overflow:hidden on body) so the
+        page underneath doesn't scroll while the lightbox is open
+
+   Navigation:
+     - left/right arrow buttons cycle through photos
+     - keyboard arrows do the same
+     - Escape closes
+     - Clicking the dark area outside the photo also closes
+   ============================================= */
 // ================================================
 // PRESCOTT — Simple Photo Gallery Lightbox
 // This runs automatically on the Properties page.
@@ -1279,18 +1493,22 @@ function initPrescottGallery() {
 
 document.addEventListener("DOMContentLoaded", initPrescottGallery);
 
+/* =============================================
+   8. FARM TALK — Category filter pills
+   =============================================
+   The row of filter pills across the top of farm-talk.html.
+   Each pill has a data-category attribute ("all", "wildlife",
+   "farming", etc.) and each article card has a matching
+   data-category on its outer element. Click a pill and we:
 
-// ================================================
-// FARM TALK — Category filter pills
-// ------------------------------------------------
-// The Farm Talk page shows a row of category pills
-// (e.g. "All", "Wildlife", "Farming", "Family").
-// Clicking a pill hides all article cards that do
-// not match the selected category, and shows only
-// those that do. "All" always shows every card.
-// Each card stores its category in a data-category
-// attribute on the article card element.
-// ================================================
+     1. Mark that pill .active (removes .active from the others)
+     2. Walk every article card and set display="" (show) if
+        it matches, display="none" (hide) if it doesn't.
+
+   Using style.display directly is simpler than adding/removing
+   a class here — if we did it via a class, we'd have to remember
+   to remove it from the correct cards on each click.
+   ============================================= */
 document.addEventListener("DOMContentLoaded", () => {
   const pills = document.querySelectorAll(".category-pill");
   const cards = document.querySelectorAll(".article-card");
@@ -1317,19 +1535,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+/* =============================================
+   9. FARM TALK — Article expand / collapse
+   =============================================
+   Every article card has a "Read Article" button. Click it
+   and the script flips three classes:
 
-// ================================================
-// FARM TALK — Article expand / collapse
-// ------------------------------------------------
-// Each article card on the Farm Talk page has a
-// "Read Article" button that toggles the full
-// article text open and closed. The full text lives
-// in a hidden .article-full element inside the card.
-// When opened, the page smoothly scrolls to the top
-// of the card so the expanded content is visible.
-// The button label also toggles between
-// "Read Article" and "Close Article" to reflect state.
-// ================================================
+     .article-full   → .open   (CSS reveals the hidden body)
+     .btn-read-article → .open (button color goes grey)
+     .article-card   → .expanded (used by the print stylesheet
+                                  so only the expanded card prints)
+
+   Plus the button label flips between "Read Article" and
+   "Close Article", and we smooth-scroll the card to the top
+   of the viewport so the reader doesn't have to scroll
+   themselves to find the newly-revealed text.
+
+   The print stylesheet (@media print in styles.css) keys off
+   the .expanded class — that's how the "Print Article" button
+   ends up producing a clean printout of just this article.
+   ============================================= */
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".btn-read-article").forEach(btn => {
     btn.addEventListener("click", () => {

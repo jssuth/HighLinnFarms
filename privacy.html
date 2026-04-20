@@ -1,5 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+    <!-- =============================================
+     PRIVACY POLICY PAGE — privacy.html
+     Standalone legal page. Uses a simpler layout than the rest of
+     the site: just a slim nav header at the top, the policy text,
+     and a thin footer. No top bar, no weather, no scripts needed.
+
+     Two stylesheets are loaded — styles.css for the site basics, and
+     policy.css for the policy-specific text styling.
+
+     The robots noindex,follow tag tells search engines not to list
+     this page in search results, but it's fine to follow links from
+     it. No need for legal pages cluttering up Google.
+     ============================================= -->
 <head>
 
     <meta charset="UTF-8">
@@ -10,6 +23,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy | High Linn Farms</title>
     <meta name="description" content="Privacy policy for highlinnfarms.com — how information submitted through this site is handled.">
+    <!-- Tell search engines not to index legal boilerplate. -->
     <meta name="robots" content="noindex, follow">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/policy.css">
@@ -18,14 +32,14 @@
 
 <body id="top" class="policy-page">
 
-    <!-- Simple Header with Navigation -->
+    <!-- Slim header — no logo bar, just the nav links so visitors
+         can get back to the rest of the site. -->
     <header class="simple-header">
         <nav class="main-nav">
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="properties.html">Properties</a></li>
-                <!--<li><a href="gallery.html">Gallery</a></li>-->
                 <li><a href="farm-talk.html">Farm Talk</a></li>
                 <li><a href="contact.html">Contact & Directions</a></li>
                 <li><a href="stay.html">Stay With Us</a></li>
@@ -33,12 +47,13 @@
         </nav>
     </header>
 
-    <!-- Title Bar -->
+    <!-- Title bar — page title shown in a colored band. -->
     <div class="policy-header">
         <h1>Privacy Policy</h1>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main content — numbered policy sections.
+         Update the "Last Updated" date when the policy changes. -->
     
     <section class="policy-content">
 
@@ -115,7 +130,8 @@
         
     </section> 
 
-    <!-- Footer -->
+    <!-- Slim footer — only the legal links and copyright.
+         This is the "simple" footer the two legal pages share. -->
     <footer class="site-footer">
 
       <div class="footer-bottom">
@@ -132,7 +148,7 @@
       </div>
 
     </footer>
-
+     <!-- Floating "↑ Top" button in the corner — jumps to body id="top". -->
     <a class="to-top-fab" href="#top" aria-label="Back to top">↑ Top</a>
  
 </body>
