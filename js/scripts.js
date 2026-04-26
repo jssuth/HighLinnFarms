@@ -834,7 +834,7 @@ const ARCHIVE_ITEMS = {
     type: "image",
     title: "Mason & Maud",
     label: "Portrait",
-    src: "archives/walter-mason/Mason-Maud.jpg"
+    src: "archives/walter-mason/mason-maud.jpg"
   },
   {
     type: "image",
@@ -871,7 +871,7 @@ const ARCHIVE_ITEMS = {
     type: "image",
     title: "Carl & Mary Jane",
     label: "Together",
-    src: "archives/carl-mason/Carl-Mary.jpg"
+    src: "archives/carl-mason/carl-mary.jpg"
   },
   {
     type: "image",
