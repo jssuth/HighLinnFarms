@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/highli31/new.highlinnfarms.com/
+    - /usr/bin/rsync -a --exclude='.git/' --exclude='.github/' --exclude='.cpanel.yml' --exclude='.gitattributes' --exclude='.gitignore' --exclude='.DS_Store' --exclude='README.md' ./ $DEPLOYPATH
