@@ -1,2 +1,2 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Disable line-ending normalization to avoid dirty-tree state on Linux server checkouts
+* -text
