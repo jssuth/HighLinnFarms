@@ -1571,7 +1571,24 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.classList.remove("open");
         card.classList.remove("expanded");
       } else {
-        // Currently closed — expand it and scroll into view
+        // First, close any OTHER articles that are currently open.
+        // This guarantees only one article ever has .expanded at a time,
+        // which is what the print stylesheet keys off of — so the print
+        // always shows just the article you just opened.
+        document.querySelectorAll(".article-card.expanded").forEach(other => {
+          if (other !== card) {
+            other.classList.remove("expanded");
+            const otherFull = other.querySelector(".article-full");
+            if (otherFull) otherFull.classList.remove("open");
+            const otherBtn = other.querySelector(".btn-read-article");
+            if (otherBtn) {
+              otherBtn.textContent = "Read Article";
+              otherBtn.classList.remove("open");
+            }
+          }
+        });
+
+        // Now expand this article and scroll into view
         full.classList.add("open");
         btn.textContent = "Close Article";
         btn.classList.add("open");
