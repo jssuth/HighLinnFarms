@@ -804,6 +804,12 @@ const ARCHIVE_ITEMS = {
     src: "archives/walter-j/civil-war-illinois-archive.pdf#toolbar=0&navpanes=0&scrollbar=0"
   },
   {
+    type: "pdf",
+    title: "Enlistment Record (1864)",
+    label: "Enlistment",
+    src: "archives/walter-j/enlistment-record-1864.pdf#toolbar=0&navpanes=0&scrollbar=0"
+  },
+  {
     type: "html",
     title: "Citizen of Prescott (1884–1887)",
     label: "1884-87",
