@@ -38,9 +38,33 @@
     <!-- Open Graph — controls how this page looks when shared on social media -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://highlinnfarms.com/">
+    <link rel="canonical" href="https://highlinnfarms.com/">
     <meta property="og:title" content="High Linn Farms | Hunting Land &amp; Farm Stay in Southeast Kansas">
     <meta property="og:description" content="Historic family farm near Prescott, Kansas. Timbered hunting retreat near Pleasanton and a working 110-acre farmstead — genuine Kansas land with 150 years of history.">
     <meta property="og:image" content="https://highlinnfarms.com/images/mission.jpg">
+    <!-- Structured data (JSON-LD) — helps search engines understand who
+         this site represents. Uses only verified info from the site;
+         add telephone, full street address, geo coordinates, or social
+         profile URLs (sameAs) here whenever those are confirmed. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "High Linn Farms",
+      "url": "https://highlinnfarms.com/",
+      "logo": "https://highlinnfarms.com/images/apple-touch-icon.png",
+      "image": "https://highlinnfarms.com/images/mission.jpg",
+      "email": "info@highlinnfarms.com",
+      "description": "High Linn Farms is a historic family farm near Prescott, Kansas — 150 years of roots, two properties to explore, and genuine rural land open to the right guests.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Prescott",
+        "addressRegion": "KS",
+        "addressCountry": "US"
+      },
+      "areaServed": ["Prescott, Kansas", "Pleasanton, Kansas"]
+    }
+    </script>
     <!-- Site-wide stylesheet — every page pulls its look from styles.css. -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
