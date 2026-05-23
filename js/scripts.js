@@ -9,12 +9,11 @@
      2.  Clock          (top bar, left side)
      3.  Weather panel  (top bar, right side) — by far the
                         biggest chunk of this file
-     4.  About-page inline viewer (ancestor archive photos)
-     5.  About-page archive-viewer wiring
+     4.  About-page archive-viewer wiring
+     5.  Properties-page seasonal tab viewer (spring/summer/fall/winter)
      6.  Properties-page lightbox (full-screen photo viewer)
-     7.  Properties-page seasonal tab viewer (spring/summer/fall/winter)
-     8.  Farm Talk — category filter pills
-     9.  Farm Talk — article expand / collapse
+     7.  Farm Talk — category filter pills
+     8.  Farm Talk — article expand / collapse
 
    Most features work off IDs and data-* attributes in the HTML,
    so the script stays in its own file and doesn't need to be
@@ -28,41 +27,49 @@
 /* =============================================
    1. DATE — top bar, left side
    =============================================
-   Reads the <span id="date">, replaces its contents with
-   "Fri, 4/17/26" style text built from the visitor's local
-   clock, then sets a 1-minute interval that only updates the
-   displayed date if the clock rolls past midnight. That way the
-   date rewrites itself once a day instead of once a second.
+   Reads the <span id="date"> and fills it with "Fri, 5/23/26"
+   style text built from the visitor's local clock. A 1-minute
+   interval then re-checks and rewrites it only when the day has
+   actually rolled over — detected by comparing the freshly
+   formatted string against what's already displayed, rather than
+   trying to catch the exact 00:00 minute (which a once-a-minute
+   timer can drift a few seconds past and skip). The DOM write is
+   skipped on every minute where the date hasn't changed.
    ============================================= */
 // =========================
 // Date
 // =========================
-function updateDate() {
-    const dateSpan = document.getElementById('date');
-    const now = new Date();
-
+// Build the "Fri, 5/23/26" style string for a given Date.
+function formatDate(date) {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    const dayName = days[now.getDay()];
-    const month = now.getMonth() + 1; // JS months start at 0
-    const day = now.getDate();
-    const year = String(now.getFullYear()).slice(-2); // last two digits
+    const dayName = days[date.getDay()];
+    const month = date.getMonth() + 1; // JS months start at 0
+    const day = date.getDate();
+    const year = String(date.getFullYear()).slice(-2); // last two digits
 
-    dateSpan.textContent = `${dayName}, ${month}/${day}/${year}`;
+    return `${dayName}, ${month}/${day}/${year}`;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateDate();
-});
+// Write today's date into the top bar, but only when it actually
+// changes. Comparing against what's already shown is what makes the
+// daily rollover bulletproof: instead of trying to catch the exact
+// 00:00 minute, we just notice the displayed string no longer matches
+// today's and refresh — so a timer that drifts past midnight, or a
+// laptop waking from sleep, can't leave yesterday's date on screen.
+function updateDate() {
+    const dateSpan = document.getElementById('date');
+    if (!dateSpan) return;
 
-
-// Refresh the date automatically at midnight
-setInterval(() => {
-    const now = new Date();
-    if (now.getHours() === 0 && now.getMinutes() === 0) {
-        updateDate();
+    const todayStr = formatDate(new Date());
+    if (dateSpan.textContent !== todayStr) {
+        dateSpan.textContent = todayStr;
     }
-}, 60000); // checks once per minute
+}
+
+
+// Re-check once a minute and refresh if the day has rolled over.
+setInterval(updateDate, 60000); // checks once per minute
 
 
 /* =============================================
@@ -300,6 +307,50 @@ async function getCoordinatesForCity(city) {
   }
 }
 
+/* Cached fetch for the OpenWeather endpoints. Weather barely
+   changes from minute to minute, but every page a visitor opens
+   would otherwise trigger a brand-new fetch. This stashes each
+   response in localStorage under a key derived from the request
+   URL (with the API key stripped out) and reuses it for ttlMs
+   milliseconds — about 10 minutes by default. So browsing around
+   the site costs roughly one API call instead of one per page.
+
+   Returns an envelope { ts, data }, where ts is when the data was
+   actually fetched (used for the "Updated" label so it's honest
+   even when the data came from cache) and data is the parsed JSON.
+
+   Caching is best-effort: if localStorage is blocked (e.g. private
+   browsing) or the stored entry is missing/stale/corrupt, it just
+   falls back to a live fetch. */
+async function getCachedWeather(url, ttlMs = 10 * 60 * 1000) {
+  // Build the cache key from the URL but blank out the appid value,
+  // so the API key never gets written into a storage key.
+  const cacheKey = "hlf_wx_" + url.replace(/([?&])appid=[^&]*/i, "$1appid=");
+
+  // Fresh cache hit? Reuse it and skip the network entirely.
+  try {
+    const hit = JSON.parse(localStorage.getItem(cacheKey));
+    if (hit && typeof hit.ts === "number" && (Date.now() - hit.ts) < ttlMs) {
+      return hit;
+    }
+  } catch (_) {
+    /* malformed entry or storage blocked — fall through to a live fetch */
+  }
+
+  // Miss or stale: fetch fresh, then try to cache it for next time.
+  const response = await fetch(url);
+  const data = await response.json();
+  const entry = { ts: Date.now(), data };
+
+  try {
+    localStorage.setItem(cacheKey, JSON.stringify(entry));
+  } catch (_) {
+    /* storage full or unavailable — caching is best-effort, fetch still worked */
+  }
+
+  return entry;
+}
+
 /* The main weather refresh. Reads the current lat/lon from
    weatherConfig, asks OpenWeather for the current conditions,
    updates both the top-bar pill ("Clouds, 19°F") and the
@@ -326,12 +377,13 @@ async function updateWeather() {
   let windSpeed = "--";
   let humidity = "--";
   let feelsLike = "--°F";
+  let dataTs = Date.now(); // when the weather data was actually fetched (fresh or from cache)
 
   try {
-    const response = await fetch(
+    const { ts, data } = await getCachedWeather(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`
     );
-    const data = await response.json();
+    dataTs = ts;
 
     condition = data.weather[0].main;
     temperature = Math.round(data.main.temp) + "°F";
@@ -359,9 +411,10 @@ async function updateWeather() {
   if (humidityEl) humidityEl.innerText = `💧 Humidity: ${humidity}`;
   if (feelsLikeEl) feelsLikeEl.innerText = `🌡️ Feels Like: ${feelsLike}`;
 
-  // Updated time
-  const now = new Date();
-  const timeString = now.toLocaleTimeString([], {
+  // Updated time — reflects when the data was actually fetched,
+  // which may be a few minutes ago if it came from the cache.
+  const updatedAt = new Date(dataTs);
+  const timeString = updatedAt.toLocaleTimeString([], {
     hour: "numeric",
     minute: "2-digit",
   });
@@ -385,8 +438,7 @@ async function updateMultiDayForecast(lat, lon) {
   const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
 
   try {
-    const response = await fetch(url);
-    const data = await response.json();
+    const { data } = await getCachedWeather(url);
 
     const dayIndices = [8, 16, 24, 32, 39];
     const today = new Date();
@@ -642,121 +694,7 @@ citySubmit.addEventListener("click", async () => {
 });
 
 /* =============================================
-   4. ABOUT PAGE — Inline viewer (generic IIFE)
-   =============================================
-   This is the generic "open a media viewer with thumbnails"
-   machinery. It powers any viewer panel on the page that
-   follows the same HTML structure — the About page uses it
-   for ancestor archives (see block 5 below for the actual
-   content data).
-
-   The IIFE (that's the "(function () { ... })();" wrapper)
-   runs immediately on page load and keeps its internal
-   variables private so they don't leak into the global scope
-   and collide with anything else.
-   ============================================= */
-// ============================================================
-// ABOUT PAGE — INLINE VIEWER (IIFE)
-// This block handles the inline media viewer used on the About
-// page for items like the farm map or document viewer panels.
-// It is wrapped in an immediately-invoked function expression
-// (IIFE) so that its internal variables stay private and do
-// not conflict with other scripts on the page.
-//
-// How it works:
-//   - Each viewer panel in the HTML has a [data-viewer-open] trigger button.
-//   - Clicking the button finds the matching viewer element by ID,
-//     runs setupViewer() on it the first time (lazy init), then
-//     makes it visible and scrolls it into view.
-//   - Inside setupViewer(), the viewer reads its own thumbnail
-//     buttons to build the item list, then wires up prev/next/close.
-// ============================================================
-(function () {
-
-  // Sets up a single viewer panel.
-  // Called once per viewer the first time it is opened.
-  function setupViewer(viewerEl) {
-    const thumbsWrap = viewerEl.querySelector("[data-items]");
-    const thumbs = Array.from(thumbsWrap.querySelectorAll(".thumb"));
-    const imgEl = viewerEl.querySelector('img.viewer-media[data-type="image"]');
-    const pdfEl = viewerEl.querySelector('iframe.viewer-media[data-type="pdf"]');
-    const countEl = viewerEl.querySelector(".viewer-count");
-    const prevBtn = viewerEl.querySelector("[data-prev]");
-    const nextBtn = viewerEl.querySelector("[data-next]");
-    const closeBtn = viewerEl.querySelector("[data-viewer-close]");
-
-    let index = 0; // Tracks which item is currently displayed
-
-    // Displays item at position i (wraps around at the ends).
-    // Updates the active thumbnail highlight, swaps the visible
-    // media element (image or PDF iframe), and updates the counter.
-    function show(i) {
-      index = (i + thumbs.length) % thumbs.length; // Wrap around
-      thumbs.forEach(t => t.classList.remove("is-active"));
-      const active = thumbs[index];
-      active.classList.add("is-active");
-
-      const src = active.getAttribute("data-src");
-      const kind = active.getAttribute("data-kind"); // "image" or "pdf"
-
-      // Hide both media elements, then show only the correct one
-      imgEl.classList.remove("is-active");
-      pdfEl.classList.remove("is-active");
-
-      if (kind === "pdf") {
-        pdfEl.src = src;
-        pdfEl.classList.add("is-active");
-      } else {
-        imgEl.src = src;
-        imgEl.alt = active.getAttribute("aria-label") || "";
-        imgEl.classList.add("is-active");
-      }
-
-      // Update the "1 / 3" counter if present
-      if (countEl) countEl.textContent = `${index + 1} / ${thumbs.length}`;
-    }
-
-    // Clicking a thumbnail jumps directly to that item
-    thumbs.forEach((btn, i) => {
-      btn.addEventListener("click", () => show(i));
-    });
-
-    prevBtn.addEventListener("click", () => show(index - 1));
-    nextBtn.addEventListener("click", () => show(index + 1));
-
-    closeBtn.addEventListener("click", () => {
-      viewerEl.classList.remove("is-open");
-      viewerEl.setAttribute("aria-hidden", "true");
-      show(0); // Reset to the first item (portrait) when closing
-    });
-
-    show(0); // Show the first item immediately on setup
-  }
-
-  // Wire up all [data-viewer-open] trigger buttons on the page.
-  // Each button stores the ID of the viewer it should open.
-  // The viewer is initialized lazily — only on first open —
-  // to avoid processing panels that are never viewed.
-  document.querySelectorAll("[data-viewer-open]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-viewer-open");
-      const viewer = document.getElementById(id);
-      if (!viewer) return;
-
-      if (!viewer.dataset.ready) {
-        // First open: run setup, then mark as initialized
-        setupViewer(viewer);
-        viewer.dataset.ready = "true";
-      }
-      viewer.classList.add("is-open");
-      viewer.setAttribute("aria-hidden", "false");
-      viewer.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  });
-})();
-
-/* =============================================
-   5. ABOUT PAGE — Archive viewers (data + setup)
+   4. ABOUT PAGE — Archive viewers (data + setup)
    =============================================
    Each ancestor on about.html has a "📂 View Archives" button
    that opens a .media-viewer panel below the card. Instead of
@@ -1074,7 +1012,7 @@ document.addEventListener("click", (event) => {
 });
 
 /* =============================================
-   7. SEASONAL TAB VIEWER (Properties page)
+   5. SEASONAL TAB VIEWER (Properties page)
    =============================================
    Builds the four-tab (Winter / Spring / Summer / Fall)
    photo viewer on properties.html. All photo data lives in
@@ -1384,12 +1322,13 @@ function initSeasonalViewer(viewerEl) {
   }
 }
 
-// Find every seasonal viewer on the page and initialize it when the
-// DOM is fully loaded. Each viewer element must have a data-property
-// attribute matching a key in SEASONAL_PHOTOS (e.g. data-property="pleasanton").
-document.addEventListener("DOMContentLoaded", () => {
+// Initialize every seasonal viewer on the page. Each viewer element must
+// have a data-property attribute matching a key in SEASONAL_PHOTOS
+// (e.g. data-property="pleasanton"). Called from the page bootstrap at the
+// bottom of this file, once the DOM is ready.
+function initSeasonalViewers() {
   document.querySelectorAll(".seasonal-viewer[data-property]").forEach(initSeasonalViewer);
-});
+}
 
 /* =============================================
    6. PROPERTIES PAGE — Prescott photo gallery + lightbox
@@ -1415,30 +1354,56 @@ document.addEventListener("DOMContentLoaded", () => {
      - Clicking the dark area outside the photo also closes
    ============================================= */
 // ================================================
-// PRESCOTT — Simple Photo Gallery Lightbox
-// This runs automatically on the Properties page.
-// When a visitor clicks any photo in the Prescott gallery,
-// it opens a full-screen lightbox viewer with the caption, a photo
-// counter (e.g. "3 / 17"), and left/right arrow navigation.
-// Keyboard navigation is also supported: arrow keys move between
-// photos and Escape closes the lightbox.
-// New photos are picked up automatically as long as they are
-// added to the HTML gallery grid — no JavaScript changes needed.
+// Generic Photo Gallery Lightbox
+// Turns a grid of figures into a full-screen lightbox viewer with
+// an optional caption, an optional "3 / 17" counter, prev/next
+// buttons, and keyboard navigation. It's parametrized by a config
+// object naming the elements to wire up, so the SAME function can
+// power any number of galleries on the site without copy-pasting
+// the logic — see initPrescottGallery() below for a usage example.
+//
+// config fields:
+//   galleryId    (required) container holding the gallery items
+//   lightboxId   (required) the full-screen lightbox element
+//   imgId        (required) the <img> inside the lightbox
+//   captionId    (optional) element that shows each figure's caption
+//   counterId    (optional) element that shows "3 / 17"
+//   itemSelector (optional) how to find items, default ".gallery-item"
+//
+// The close / prev / next controls are found by class INSIDE the
+// lightbox element (.lightbox-close / .lightbox-prev / .lightbox-next),
+// so every lightbox carries its own controls and multiple galleries
+// can coexist on one page. Any optional piece that's missing is just
+// skipped, so this also drives a minimal caption-less, counter-less
+// lightbox. New photos are picked up automatically — no JS changes.
 // ================================================
 
-function initPrescottGallery() {
-  const gallery = document.getElementById("prescott-gallery");
-  if (!gallery) return;
+function initLightboxGallery(config) {
+  const {
+    galleryId,
+    lightboxId,
+    imgId,
+    captionId,
+    counterId,
+    itemSelector = ".gallery-item",
+  } = config;
 
-  const lightbox  = document.getElementById("prescott-lightbox");
-  const lbImg     = document.getElementById("lightbox-img");
-  const lbCaption = document.getElementById("lightbox-caption");
-  const lbCounter = document.getElementById("lightbox-counter");
+  const gallery = document.getElementById(galleryId);
+  if (!gallery) return; // This gallery isn't on the current page — do nothing.
+
+  const lightbox = document.getElementById(lightboxId);
+  if (!lightbox) return; // Misconfigured / missing lightbox — bail safely.
+
+  const lbImg     = document.getElementById(imgId);
+  const lbCaption = captionId ? document.getElementById(captionId) : null;
+  const lbCounter = counterId ? document.getElementById(counterId) : null;
   const lbClose   = lightbox.querySelector(".lightbox-close");
   const lbPrev    = lightbox.querySelector(".lightbox-prev");
   const lbNext    = lightbox.querySelector(".lightbox-next");
 
-  const items = Array.from(gallery.querySelectorAll(".gallery-item"));
+  const items = Array.from(gallery.querySelectorAll(itemSelector));
+  if (!lbImg || items.length === 0) return; // Nothing to show.
+
   let currentIdx = 0;
 
   function showItem(idx) {
@@ -1447,15 +1412,15 @@ function initPrescottGallery() {
     const cap = items[currentIdx].querySelector("figcaption");
     lbImg.src = img.src;
     lbImg.alt = img.alt;
-    lbCaption.textContent = cap ? cap.textContent : "";
-    lbCounter.textContent = `${currentIdx + 1} / ${items.length}`;
+    if (lbCaption) lbCaption.textContent = cap ? cap.textContent : "";
+    if (lbCounter) lbCounter.textContent = `${currentIdx + 1} / ${items.length}`;
   }
 
   function openLightbox(idx) {
     showItem(idx);
     lightbox.hidden = false;
     document.body.style.overflow = "hidden";
-    lbClose.focus();
+    if (lbClose) lbClose.focus();
   }
 
   function closeLightbox() {
@@ -1479,16 +1444,16 @@ function initPrescottGallery() {
     });
   });
 
-  lbClose.addEventListener("click", closeLightbox);
-  lbPrev.addEventListener("click",  () => showItem(currentIdx - 1));
-  lbNext.addEventListener("click",  () => showItem(currentIdx + 1));
+  if (lbClose) lbClose.addEventListener("click", closeLightbox);
+  if (lbPrev)  lbPrev.addEventListener("click",  () => showItem(currentIdx - 1));
+  if (lbNext)  lbNext.addEventListener("click",  () => showItem(currentIdx + 1));
 
   // Click outside inner content to close
   lightbox.addEventListener("click", e => {
     if (e.target === lightbox) closeLightbox();
   });
 
-  // Keyboard navigation
+  // Keyboard navigation (only acts while this lightbox is open)
   document.addEventListener("keydown", e => {
     if (lightbox.hidden) return;
     if (e.key === "Escape")     closeLightbox();
@@ -1497,10 +1462,22 @@ function initPrescottGallery() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", initPrescottGallery);
+// Prescott (Properties page) — wires the existing markup through the
+// generic gallery above. To add another lightbox elsewhere on the site,
+// copy this one call with that gallery's element IDs; no need to
+// duplicate any of the logic.
+function initPrescottGallery() {
+  initLightboxGallery({
+    galleryId:  "prescott-gallery",
+    lightboxId: "prescott-lightbox",
+    imgId:      "lightbox-img",
+    captionId:  "lightbox-caption",
+    counterId:  "lightbox-counter",
+  });
+}
 
 /* =============================================
-   8. FARM TALK — Category filter pills
+   7. FARM TALK — Category filter pills
    =============================================
    The row of filter pills across the top of farm-talk.html.
    Each pill has a data-category attribute ("all", "wildlife",
@@ -1515,7 +1492,7 @@ document.addEventListener("DOMContentLoaded", initPrescottGallery);
    a class here — if we did it via a class, we'd have to remember
    to remove it from the correct cards on each click.
    ============================================= */
-document.addEventListener("DOMContentLoaded", () => {
+function initCategoryFilter() {
   const pills = document.querySelectorAll(".category-pill");
   const cards = document.querySelectorAll(".article-card");
 
@@ -1539,10 +1516,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-});
+}
 
 /* =============================================
-   9. FARM TALK — Article expand / collapse
+   8. FARM TALK — Article expand / collapse
    =============================================
    Every article card has a "Read Article" button. Click it
    and the script flips three classes:
@@ -1561,7 +1538,7 @@ document.addEventListener("DOMContentLoaded", () => {
    the .expanded class — that's how the "Print Article" button
    ends up producing a clean printout of just this article.
    ============================================= */
-document.addEventListener("DOMContentLoaded", () => {
+function initArticleExpand() {
   document.querySelectorAll(".btn-read-article").forEach(btn => {
     btn.addEventListener("click", () => {
       const card = btn.closest(".article-card"); // The card containing this button
@@ -1603,4 +1580,28 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+}
+
+
+/* =============================================
+   PAGE BOOTSTRAP — single startup entry point
+   =============================================
+   One DOMContentLoaded listener that runs every feature's init
+   in a clear, fixed order. Each init function is defined next to
+   its own feature block above; this is just the startup checklist.
+
+   Safe to call them all on every page: an init whose target
+   elements aren't on the current page simply finds nothing and
+   does nothing (the query selectors return empty lists).
+
+   NOTE: the clock (Block 2) and the date's midnight refresh run
+   on their own setInterval timers at the top of the file, so they
+   are intentionally not part of this DOM-ready bootstrap.
+   ============================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  updateDate();          // Block 1 — date in the top bar
+  initSeasonalViewers(); // Block 5 — seasonal tab viewer (Properties page)
+  initPrescottGallery(); // Block 6 — Prescott lightbox (Properties page)
+  initCategoryFilter();  // Block 7 — Farm Talk category pills
+  initArticleExpand();   // Block 8 — Farm Talk article expand / collapse
 });
