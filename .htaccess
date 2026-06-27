@@ -1,0 +1,11 @@
+# =============================================
+# .htaccess for highlinnfarms.com
+# =============================================
+# Apache reads this file when serving the site and applies the
+# directives below to every request handled out of this folder
+# (and its subfolders, unless overridden by another .htaccess).
+
+# Tell browsers to interpret text files as UTF-8 so em-dashes,
+# fractions, accented characters, and other non-ASCII content
+# display correctly instead of as garbled "â€"" mojibake.
+AddDefaultCharset utf-8
