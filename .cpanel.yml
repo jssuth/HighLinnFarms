@@ -1,10 +1,14 @@
 ---
 deployment:
   tasks:
-    # NOTE: DEPLOYPATH points at a folder named "new.highlinnfarms.com"
-    # for historical reasons (it was originally the subdomain's docroot).
-    # In cPanel, the bare domain highlinnfarms.com is configured to use
-    # this same folder as its document root, so deploys here update the
-    # live site at both URLs — there is no need to copy anywhere else.
-    - export DEPLOYPATH=/home/highli31/new.highlinnfarms.com/
+    # NOTE: DEPLOYPATH points at /public_html — the document root for
+    # the main domain highlinnfarms.com. (InMotion locks the main
+    # domain's docroot to /public_html and doesn't allow changing it
+    # via cPanel, so we deploy here instead.) The subdomain
+    # new.highlinnfarms.com still has its own docroot at
+    # /home/highli31/new.highlinnfarms.com/ but is now redirected
+    # (via cPanel → Redirects) to https://highlinnfarms.com, so
+    # visitors at either URL end up on the bare domain serving from
+    # this folder.
+    - export DEPLOYPATH=/home/highli31/public_html/
     - /usr/bin/rsync -a --checksum --exclude='.git/' --exclude='.github/' --exclude='.cpanel.yml' --exclude='.gitattributes' --exclude='.gitignore' --exclude='.DS_Store' --exclude='README.md' ./ $DEPLOYPATH
