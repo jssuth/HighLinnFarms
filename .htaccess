@@ -16,3 +16,17 @@
 # locale default (often Windows-1252), garbling the em-dashes.
 AddDefaultCharset utf-8
 AddCharset utf-8 .js .css .json .xml .svg
+
+# Always have browsers re-check the server for fresh HTML pages
+# instead of reusing a cached copy. Combined with the ?v=YYYY-MM-DD
+# cache-busting labels on script/stylesheet references inside those
+# pages, this guarantees that when you deploy a change, visitors see
+# it on their next visit — not after their browser cache happens
+# to expire on its own. Static assets (JS, CSS, images) can still be
+# cached long-term, because their URLs change whenever you bump the
+# version label.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
