@@ -8,4 +8,11 @@
 # Tell browsers to interpret text files as UTF-8 so em-dashes,
 # fractions, accented characters, and other non-ASCII content
 # display correctly instead of as garbled "â€"" mojibake.
+#
+# AddDefaultCharset only covers text/html and text/plain, so we
+# also need AddCharset to extend the same behavior to JavaScript,
+# CSS, JSON, and XML responses — otherwise scripts.js comes back
+# without a declared charset and the browser falls back to its
+# locale default (often Windows-1252), garbling the em-dashes.
 AddDefaultCharset utf-8
+AddCharset utf-8 .js .css .json .xml .svg
